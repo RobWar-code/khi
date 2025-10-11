@@ -1,0 +1,142 @@
+body {
+    background-color: #f0d040;
+}
+
+.textButton {
+    background-color: #50f050;
+    margin-right: 5px;
+}
+
+/* Introduction */
+#introDiv {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    padding-bottom: 15px;
+    text-align: center;
+    background-color: rgba(150, 150, 50, 0.9);
+    z-index: 5;
+}
+
+#introDiv p {
+    width: 50%;
+    margin: 0 auto;
+    margin-bottom: 6px;
+}
+
+/* Menu / Title Bar */
+
+#menuTable {
+    width: 100%;
+    background-color: bisque;
+}
+
+#menuLogoCell {
+    width: 64px;
+}
+
+#menuTitleCell {
+    width: calc(75% - 32px);
+}
+
+#menuOptionsCell {
+    width: calc(25% - 32px);
+    text-align: right;
+    padding: 4px;
+}
+
+.menuBtn {
+    background-color: #50f050;
+}
+
+/* Main Board */
+#boardDiv {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 100%;
+    text-align: center;
+}
+
+#board {
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid black;
+    background-color: #d09000
+}
+
+#board td {
+    width: 17px;
+    height: 17px;
+    padding-left: 2px;
+    border-right: 1px solid #303030;
+    border-bottom: 1px solid #303030;
+}
+
+.boardLetterDiv {
+    margin: 0;
+    border-right: 1px solid #606060;
+    border-top: 1px solid #606060;
+    width: 15px;
+    height: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.boardTileBlack {
+    background-color: black;
+    color: white;
+}
+
+.boardTileBlue {
+    background-color: #40e0f0;
+    color: black; 
+}
+
+/* Rack Section */
+#rackPlayDiv {
+    width: calc(100% - 8px);
+    background-color:bisque;
+    margin-bottom: 8px;
+    padding: 4px;
+}
+
+#rackTable {
+    margin: 0 auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#rackTable td {
+    width: 20px;
+    height: 20px;
+    border-right: 1px solid black;
+    padding: 2px;
+    padding-left: 4px;
+}
+
+.rackLetterDiv {
+    width: 16px;
+    height: 16px;
+    padding: 1px;
+    vertical-align: top;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #40e0f0;
+}
+
+/* Play Options */
+#playOptionsDiv {
+    width: calc(100% - 8px);
+    padding: 4px;
+    text-align: center;
+    background-color: bisque;
+}
+
+@media screen and (max-width: 800px) {
+    #introDiv p {
+        width: 85%;
+    }
+}

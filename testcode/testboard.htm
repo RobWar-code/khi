@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    #boardDiv {
+        width: 100%;
+        text-align: center;
+    }
+
+    #board {
+        margin: 0 auto;
+        border-collapse: collapse;
+        border-spacing: 0;
+        border: 1px solid black;
+        background-color: #d09000
+    }
+
+    #board td {
+        width: 17px;
+        height: 17px;
+        padding-left: 2px;
+        border-right: 1px solid #303030;
+        border-bottom: 1px solid #303030;
+    }
+
+    .boardLetterDiv {
+        margin: 0;
+        border-right: 1px solid #606060;
+        border-top: 1px solid #606060;
+        width: 15px;
+        height: 15px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .boardTileBlack {
+        background-color: black;
+        color: white;
+    }
+
+    .boardTileBlue {
+        background-color: #40e0f0;
+        color: black; 
+    }
+
+</style>
+</head>
+<body>
+    <div id="boardDiv">
+        <table id="board">
+
+        </table>
+    </div>
+
+<script>
+    const boardWidth = 19;
+    const boardHeight = 19;
+
+    buildBoard();
+
+    testAddBoardLetter("black", "W", 4, 6);
+    testAddBoardLetter("blue", "I", 10, 10);
+
+    function buildBoard() {
+        let board = document.getElementById("board");
+        let html = "";
+        let cellNum = 0;
+        for (let row = 0; row < boardWidth; row++) {
+            html += "<tr>";
+            for (let col = 0; col < boardHeight; col++) {
+                html += `<td class="boardCell" id="cell${cellNum}">`;
+                html += "</td>";
+                ++cellNum;
+            }
+            html += "</tr>";
+        }
+        board.innerHTML = html;
+    }
+
+    function testAddBoardLetter(tileColor, letter, across, down) {
+        let tileClass = "boardTileBlack";
+        if (tileColor === "blue") tileClass = "boardTileBlue";
+        let cellNum = down * boardWidth + across;
+        let cell = document.getElementById(`cell${cellNum}`);
+        let html = `<div class="boardLetterDiv ${tileClass}">${letter}</div>`;
+        cell.innerHTML = html;
+    }
+
+</script>
+</body>
+</html>

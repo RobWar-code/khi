@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/styles/styles.css">
+</head>
+<body>
+
+    <!-- Introduction -->
+     <div id="introDiv">
+        <h1>Khi Introduction</h1>
+        <p>
+            The game is played by one player (blue) versus the computer 
+            (black). The aim is to create two intersecting crosswords 
+            in black and blue that span the width of the board. 
+        </p>
+        <p>
+            The first player to reach the opposite side with his letter 
+            tiles is the winner. The score for the game is based on the 
+            number of tiles laid to win the game, fewer scores higher.
+        </p>
+        <p>
+            The first word is layed such that one tile of the word is set 
+            on the starred square on the side of the board. The player's 
+            is on the left, the computer's on the right.
+        </p>
+        <p>
+            Apart from the first word, which begins at the edge, tiles 
+            must be joined to at least one tile of the player's colour, 
+            already on the board.
+        </p>
+        <p>
+            Tiles must be layed on the same row or column, possibly passing
+            across or through previously layed tiles.
+        </p>
+        <p>
+            When a word crosses through the opponent's tiles or makes a new
+            word with them, the word affected is changed to the player's 
+            colour.
+        </p>
+        <p>
+            To place the tiles from the rack, click/touch a tile on the rack
+            and then click/touch the board where you want it to go. To complete
+            the word click the Play Word button below the rack.
+        </p>
+        <button class="textButton" id="introDismiss">Dismiss</button>
+     </div>
+
+    <!-- Menu -->
+    <table id="menuTable">
+        <tr id="menuRow">
+            <td id="menuLogoCell">
+                <img src="assets/mainLogo.png" width="64" height="32">
+            </td>
+            <td id="menuTitleCell">Crossword Combat Game</td>
+            <td id="menuOptionsCell">
+                <button class="menuBtn" id="introBtn">Intro</button>
+                <button class="menuBtn" id="gameScoresBtn">Game Scores</button>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Board and Rack -->
+    <div id="boardDiv">
+        <table id="board">
+
+        </table>
+    </div>
+
+    <div id="rackPlayDiv">
+        <table id="rackTable">
+            <tr>
+                <td class="rackCell" id="rackCell0"></td>
+                <td class="rackCell" id="rackCell1"></td>
+                <td class="rackCell" id="rackCell2"></td>
+                <td class="rackCell" id="rackCell3"></td>
+                <td class="rackCell" id="rackCell4"></td>
+                <td class="rackCell" id="rackCell5"></td>
+                <td class="rackCell" id="rackCell6"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="playOptionsDiv">
+        <button class="textButton" id="passOpt">Pass</button>
+        <button class="textButton" id="playWordOpt">Play Word</button>
+        <button class="textButton" id="changeTilesOpt">Change Tiles (-10)</button>
+        <button class="textButton" id="restartOpt">Restart Game</button>
+    </div>
+
+<script src="src/game.js"></script>
+<script src="src/rack.js"></script>
+<script src="src/tileSet.js"></script>
+<script src="src/wordFuncs.js"></script>
+<script>
+    let gameStarted = false;
+
+    // Events
+    let introDismiss = document.getElementById("introDismiss");
+
+    introDismiss.addEventListener('click', () => {
+        if (!gameStarted) {
+            tileSet.startGame();
+            gameStarted = true;
+        }
+        document.getElementById("introDiv").style.display = "none";
+    });
+
+    // Initialisation
+    game.buildBoard();
+    wordFuncs.loadWordList();
+
+</script>
+</body>
+</html>

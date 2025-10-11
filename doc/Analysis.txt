@@ -1,0 +1,92 @@
+Khi - a combative crossword game
+
+Contents
+    Introduction and Game Play
+    Technology
+    Screen Layout
+    Logic Flow
+    Tile Play Actions
+
+<h1>Introduction and Game Play
+    Khi is a board-based crossword game for two players (computer and human).
+    With crosswords formed on a board of 19 x 19 squares.
+
+    The aim of the game is for the two players to begin their crosswords
+    on opposite sides of the board and to attempt to reach the opposite
+    side before their opponent (or the tile hold is emptied for a draw). 
+    Game points are achieved by attaining this goal with the minimum possible 
+    number of letter tiles.
+
+    Letter tiles are dealt to each player, with the number of tiles being
+    maintained at 7 as words are played to the board so long as enough
+    tiles remain in the tile hold. The player has blue letter tiles and the 
+    computer black. There are 120 tiles in the tile hold at the start.
+
+    The start square at the centre of the opposite (horizontal) sides is
+    marked with a star to represent the starting points for each player.
+    The computer begins on the right, the player on the left.
+
+    A player must join new words to a letter of his own colour on the 
+    board. When a player's new word crosses or forms a new word with tile(s)
+    of the opponent's colours, the colours of the words formed or crossed
+    are changed to that of the player.
+
+    If a player cannot form a word he can pass. He may also change all
+    of his letters for a penalty of 10 points.
+
+<h1>Technology
+    HTML, CSS, Javascript, npm word-list
+
+    Single HTML file for presentation.
+
+<h1>Screen Layout
+    When the game is first loaded a floating description of the
+    game is displayed over the main board area, this has a 
+    dismiss button to clear it.
+
+    The main board display has a game title, 19 x 19 cell board,
+    7 letter tile rack Play Word, Pass and Change Tiles buttons.
+    A menu button with Game Scores.
+
+    The game scores are displayed on a floating div and consists
+    of two lists, player and computer.
+
+<h1>Logic Flow
+    When the page is loaded, the game initialisation procedures are
+    run. These consist of:
+        Load Word List 
+        Draw Board
+        Start Game
+            The tile hold is filled
+            The players' racks are filled from the tile hold.
+            The player's tiles are displayed in the tile rack.
+            The player has first turn. 
+            The status bar prompts the player to make his move.
+
+    When the page is first loaded the introduction panel is displayed.
+    This is cleared when the user clicks its Dismiss button.
+    Other buttons are disabled until this is done.
+
+<h1>Tile Play Actions
+    When a user clicks a rack tile:
+        If another tile is already flagged, then cancel that flag
+        and clear the highlight.
+        Set the rack tile flag to the number of the clicked tile
+        Highlight the clicked tile. 
+
+    When the user clicks a square on the board:
+        If no rack tile is current:
+            If the square contains a temporary rack tile:
+                Return it to the rack
+            Otherwise:
+                Ignore the click
+        Otherwise:
+            If the contains any other tile:
+                Ignore the click
+            Otherwise:
+                Set the square to contain the current rack tile
+                Clear the highlight from the rack
+                Put an empty cell in the rack
+
+
+

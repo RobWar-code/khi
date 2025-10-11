@@ -1,0 +1,82 @@
+const tileSet = {
+    rackLength: 7,
+    numTiles: 0,
+    tiles: [
+        {letter: "A", quantity: "6"},
+        {letter: "B", quantity: "2"},
+        {letter: "C", quantity: "3"},
+        {letter: "D", quantity: "4"},
+        {letter: "E", quantity: "7"},
+        {letter: "F", quantity: "2"},
+        {letter: "G", quantity: "3"},
+        {letter: "H", quantity: "2"},
+        {letter: "I", quantity: "6"},
+        {letter: "J", quantity: "1"},
+        {letter: "K", quantity: "2"},
+        {letter: "L", quantity: "4"},
+        {letter: "M", quantity: "2"},
+        {letter: "N", quantity: "4"},
+        {letter: "O", quantity: "5"},
+        {letter: "P", quantity: "2"},
+        {letter: "Q", quantity: "1"},
+        {letter: "R", quantity: "4"},
+        {letter: "S", quantity: "5"},
+        {letter: "T", quantity: "4"},
+        {letter: "U", quantity: "3"},
+        {letter: "V", quantity: "2"},
+        {letter: "W", quantity: "2"},
+        {letter: "X", quantity: "1"},
+        {letter: "Y", quantity: "3"},
+        {letter: "Z", quantity: "1"},
+        {letter: "*", quantity: "3"}
+    ],
+    tileHold: [],
+    racks: [],
+
+    startGame() {
+        this.fillTileHold();
+        this.fillRacks();
+        rack.displayTiles();
+    },
+
+    fillTileHold() {
+        this.numTiles = 0;
+        let tileHold = [];
+        for (let letter of this.tiles) {
+            this.numTiles += letter.quantity;
+            for (let n = 0; n < letter.quantity; n++) {
+                tileHold.push(letter.letter);
+            }
+        }
+        this.shuffleArray(tileHold);
+        this.tileHold = tileHold;
+    },
+
+    shuffleArray(a) {
+        let len = a.length;
+        for (let n = 0; n < len; n++) {
+            let p1 = Math.floor(Math.random() * len);
+            let p2 = Math.floor(Math.random() * len);
+            if (p2 === p1) {
+                --p1;
+                if (p1 < 0) p1 = 2;
+            }
+            let b = a[p1];
+            a[p1] = a[p2];
+            a[p2] = b;
+        }
+    },
+
+    fillRacks() {
+        this.racks = [];
+        for (let i = 0; i < 2; i++) {
+            let rack = [];
+            for (let j = 0; j < this.rackLength; j++) {
+                let l = this.tileHold.pop();
+                rack.push(l);
+            }
+            this.racks.push(rack);
+        }
+    }
+
+}
