@@ -71,13 +71,13 @@
     <div id="rackPlayDiv">
         <table id="rackTable">
             <tr>
-                <td class="rackCell" id="rackCell0"></td>
-                <td class="rackCell" id="rackCell1"></td>
-                <td class="rackCell" id="rackCell2"></td>
-                <td class="rackCell" id="rackCell3"></td>
-                <td class="rackCell" id="rackCell4"></td>
-                <td class="rackCell" id="rackCell5"></td>
-                <td class="rackCell" id="rackCell6"></td>
+                <td class="rackCell" id="rackCell0" onclick="rack.tileClick(event);"></td>
+                <td class="rackCell" id="rackCell1" onclick="rack.tileClick(event);"></td>
+                <td class="rackCell" id="rackCell2" onclick="rack.tileClick(event);"></td>
+                <td class="rackCell" id="rackCell3" onclick="rack.tileClick(event);"></td>
+                <td class="rackCell" id="rackCell4" onclick="rack.tileClick(event);"></td>
+                <td class="rackCell" id="rackCell5" onclick="rack.tileClick(event);"></td>
+                <td class="rackCell" id="rackCell6" onclick="rack.tileClick(event);"></td>
             </tr>
         </table>
     </div>
@@ -90,6 +90,7 @@
     </div>
 
 <script src="src/game.js"></script>
+<script src="src/board.js"></script>
 <script src="src/rack.js"></script>
 <script src="src/tileSet.js"></script>
 <script src="src/wordFuncs.js"></script>
@@ -108,8 +109,8 @@
     });
 
     // Initialisation
-    game.buildBoard();
     wordFuncs.loadWordList();
+    board.buildBoard();
 
 </script>
 </body>

@@ -1,5 +1,4 @@
 const tileSet = {
-    rackLength: 7,
     numTiles: 0,
     tiles: [
         {letter: "A", quantity: "6"},
@@ -31,11 +30,10 @@ const tileSet = {
         {letter: "*", quantity: "3"}
     ],
     tileHold: [],
-    racks: [],
 
     startGame() {
         this.fillTileHold();
-        this.fillRacks();
+        rack.fillRacks();
         rack.displayTiles();
     },
 
@@ -55,28 +53,16 @@ const tileSet = {
     shuffleArray(a) {
         let len = a.length;
         for (let n = 0; n < len; n++) {
-            let p1 = Math.floor(Math.random() * len);
+            let p1 = n;
             let p2 = Math.floor(Math.random() * len);
             if (p2 === p1) {
-                --p1;
-                if (p1 < 0) p1 = 2;
+                --p2;
+                if (p2 < 0) p2 = 2;
             }
             let b = a[p1];
             a[p1] = a[p2];
             a[p2] = b;
         }
     },
-
-    fillRacks() {
-        this.racks = [];
-        for (let i = 0; i < 2; i++) {
-            let rack = [];
-            for (let j = 0; j < this.rackLength; j++) {
-                let l = this.tileHold.pop();
-                rack.push(l);
-            }
-            this.racks.push(rack);
-        }
-    }
 
 }
