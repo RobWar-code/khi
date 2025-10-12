@@ -6,6 +6,7 @@ Contents
     Screen Layout
     Logic Flow
     Tile Play Actions
+    Play Word Actions
 
 <h1>Introduction and Game Play
     Khi is a board-based crossword game for two players (computer and human).
@@ -81,12 +82,46 @@ Contents
             Otherwise:
                 Ignore the click
         Otherwise:
-            If the contains any other tile:
+            If the square contains any other tile:
                 Ignore the click
             Otherwise:
+                Record the tile positioned in the rackTilesSet data
                 Set the square to contain the current rack tile
                 Clear the highlight from the rack
                 Put an empty cell in the rack
 
+<h1>Play Word Actions
+    When the Play Word option is used the letters placed - rack.lettersPlaced[0] array
+    is checked.
+    If no letters have been placed:
+        Ignore the option
+    Sort the letters placed array by x or y coordinate as the first two tiles
+    have been layed.
+    Scan the board along the line of the word from lowest to highest
+    If there is an empty break in the word or the letters do not form an orthogonal:
+        Inform the user and exit
+    Count any non-temp letters in the scanned word.
+    Count the non-temp own colour letters.
+    Scan for connections adjoining each layed letter.
+    Count the non-temp own colour letters of adjoining words.
+    If the non-temp own colour count is zero:
+        Inform the user and exit.
+    Check the dictionary to see if the main scanned word exists
+    If the main word does not exist:
+        Inform the user and exit.
+    Scan the adjoining intersections for words
+    Record all word start and end cells
+    Record the words that do not exist in the dictionary
+    If any words do not appear in the dictionary:
+        List and inform the user
+        Exit.
+    Scan all words crossed by the main word, record start
+    and end positions
 
+    Clear the temp flag for each letter layed from the board
+    data.
+    Clear the background highlight from each letter laid
+    Change the background color of each newly created and
+
+    
 

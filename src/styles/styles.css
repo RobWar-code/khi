@@ -63,7 +63,7 @@ body {
     border-collapse: collapse;
     border-spacing: 0;
     border: 1px solid black;
-    background-color: #d09000
+    background-color: #d09000;
 }
 
 #board td {
@@ -130,10 +130,42 @@ body {
 
 /* Play Options */
 #playOptionsDiv {
+    margin-bottom: 8px;
     width: calc(100% - 8px);
     padding: 4px;
     text-align: center;
     background-color: bisque;
+}
+
+/* Star Letter Selector */
+#starLetterDiv {
+    display: none;
+    text-align: center;
+}
+
+#starLetterTable {
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+#starLetterTable td {
+    width: 17px;
+    height: 17px;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    text-align: center;
+    padding: 1px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#statusDiv {
+    width: 100%;
+    display: none;
+    text-align: center;
+    font-style: italic;
+    color: #700000;
 }
 
 @media screen and (max-width: 800px) {

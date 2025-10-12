@@ -89,6 +89,44 @@
         <button class="textButton" id="restartOpt">Restart Game</button>
     </div>
 
+    <div id="starLetterDiv">
+        <h3>Select A Letter</h3>
+        <table id="starLetterTable">
+            <tr>
+                <td onclick="rack.selectStarLetter(event)">A</td>
+                <td onclick="rack.selectStarLetter(event)">B</td>
+                <td onclick="rack.selectStarLetter(event)">C</td>
+                <td onclick="rack.selectStarLetter(event)">D</td>
+                <td onclick="rack.selectStarLetter(event)">E</td>
+                <td onclick="rack.selectStarLetter(event)">F</td>
+                <td onclick="rack.selectStarLetter(event)">G</td>
+                <td onclick="rack.selectStarLetter(event)">H</td>
+                <td onclick="rack.selectStarLetter(event)">I</td>
+                <td onclick="rack.selectStarLetter(event)">J</td>
+                <td onclick="rack.selectStarLetter(event)">K</td>
+                <td onclick="rack.selectStarLetter(event)">L</td>
+                <td onclick="rack.selectStarLetter(event)">M</td>
+            </tr>
+            <tr>
+                <td onclick="rack.selectStarLetter(event)">N</td>
+                <td onclick="rack.selectStarLetter(event)">O</td>
+                <td onclick="rack.selectStarLetter(event)">P</td>
+                <td onclick="rack.selectStarLetter(event)">Q</td>
+                <td onclick="rack.selectStarLetter(event)">R</td>
+                <td onclick="rack.selectStarLetter(event)">S</td>
+                <td onclick="rack.selectStarLetter(event)">T</td>
+                <td onclick="rack.selectStarLetter(event)">U</td>
+                <td onclick="rack.selectStarLetter(event)">V</td>
+                <td onclick="rack.selectStarLetter(event)">W</td>
+                <td onclick="rack.selectStarLetter(event)">X</td>
+                <td onclick="rack.selectStarLetter(event)">Y</td>
+                <td onclick="rack.selectStarLetter(event)">Z</td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="statusDiv"></div>
+
 <script src="src/game.js"></script>
 <script src="src/board.js"></script>
 <script src="src/rack.js"></script>
@@ -99,6 +137,7 @@
 
     // Events
     let introDismiss = document.getElementById("introDismiss");
+    let playWordOpt = document.getElementById("playWordOpt");
 
     introDismiss.addEventListener('click', () => {
         if (!gameStarted) {
@@ -108,9 +147,16 @@
         document.getElementById("introDiv").style.display = "none";
     });
 
+    playWordOpt.addEventListener("click", () => {
+        if (rack.lettersPlaced[0].length === 0) {
+            return;
+        }
+        game.playWord(0);
+    });
+
     // Initialisation
     wordFuncs.loadWordList();
-    board.buildBoard();
+    board.initBoard();
 
 </script>
 </body>

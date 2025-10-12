@@ -2,16 +2,23 @@ Work Log
 
 Jobs Due
 
-    Move board draw from game.js to board.js
-    
-    Add Star symbols to board
-
-    Setting tiles on the board
-
-        * Rack tile click
-
-        Board click
-            Board cell data
+    Play Word Analysis
 
 
 Jobs Done
+
+    12/10/22
+    
+    * Move board draw from game.js to board.js
+    
+    * Add Star symbols to board
+
+    * Setting tiles on the board
+
+        * Test selection/removal of star tile
+
+        * Rack tile click
+
+        * Board click
+            * Board cell data
+
