@@ -1,4 +1,6 @@
 const game = {
+    gameTurn: 0,
+
     playWord(player) {
         // Sort the orthogonal of the letters placed or report error
         let placed = rack.lettersPlaced[player];
@@ -12,6 +14,31 @@ const game = {
             this.statusReport(error);
             return;
         }
+
+        if (gameTurn > 0) {
+            // Check that word is joined to own colour
+            // error = board.checkWordJoins(placed, orthogonal)
+
+            // Collect new words and crossed words
+            // Check for existence of new words
+
+            // Change the colour and player settings to the player
+            // board.changeColours(newWords, crossedWords);
+        }
+        else {
+            // Check that the first word exists
+        }    
+
+        // Clear the temp flags from the board letters
+        // board.clearTemp(placed);
+
+        // Refill the rack
+        // rack.replenish(0);
+
+        // Computer Play
+        // this.computerPlay();
+
+        ++this.gameTurn;
     },
 
     sortPlacedTiles(placed) {

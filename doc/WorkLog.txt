@@ -4,6 +4,20 @@ Jobs Due
 
     Play Word Analysis
 
+    Do word list first letter index
+
+    Do tile checks
+        * All orthogonal
+        * All Orthogonal Joined
+        Attached to existing words
+            Attached to own colour
+        Collect set of new words
+            end to end on the orthogonal
+            all other words at right angles
+        Check whether each word exists
+
+    Do turn loop
+
 
 Jobs Done
 
