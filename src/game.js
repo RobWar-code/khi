@@ -5,8 +5,13 @@ const game = {
         let placedObj = this.sortPlacedTiles(placed);
         if (placedObj.error) return;
         let orthogonal = placedObj.orthogonal;
-        console.log(orthogonal);
-        console.log(placed);
+        
+        // Check for gaps of the orthogonal
+        let error = board.checkOrthogonalGaps(placed, orthogonal);
+        if (error != "") {
+            this.statusReport(error);
+            return;
+        }
     },
 
     sortPlacedTiles(placed) {

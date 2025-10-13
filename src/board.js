@@ -117,5 +117,52 @@ const board = {
             cellElem.innerHTML = `<img src="assets/boardStar2.png" width="17" height="17">`;
         }
         cellElem.style.backgroundColor = "#d09000";
+    },
+
+    checkOrthogonalGaps(placed, orthogonal) {
+        let error = "";
+        let len = placed.length;
+        if (len === 1) return;
+
+        let coord = [];
+        if (orthogonal === "horizontal") {
+            coord[0] = "cellY";
+            coord[1] = "cellX";
+        }
+        else {
+            coord[0] = "cellX";
+            coord[1] = "cellY";           
+        }
+        let orthogCoord = placed[0][coord[0]];
+        let index = 0;
+        let lastStepCoord = -1;
+        for (let tile of placed) {
+            let stepCoord = tile[coord[1]];
+            console.log("stepCoord:", stepCoord);
+            if (index > 0) {
+                if (stepCoord - lastStepCoord > 1) {
+                    // Check the board for a letter;
+                    if (orthogonal === "horizontal") {
+                        for (let x = lastStepCoord + 1; x < stepCoord; x++) {
+                            if (this.boardData[orthogCoord][x].letter === "") {
+                                error = "There is a gap in the letters you've placed";
+                                return error;
+                            }
+                        }
+                    }
+                    else {
+                        for (let y = lastStepCoord + 1; y < stepCoord; y++) {
+                            if (this.boardData[y][orthogCoord].letter === "") {
+                                error = "There is a gap in the letters you've placed";
+                                return error;
+                            }
+                        }
+                    }
+                }
+            }
+            lastStepCoord = stepCoord;
+            ++index;
+        }
+        return "";
     }
 }
