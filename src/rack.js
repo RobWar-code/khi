@@ -60,7 +60,9 @@ const rack = {
         let letter = this.racks[0][this.currentRackTile];
 
         // Check whether the rack tile is a *
+        let isStar = false;
         if (letter === "*") {
+            isStar = true;
             document.getElementById("starLetterDiv").style.display = "block";
             this.starCellX = cellX;
             this.starCellY = cellY;
@@ -68,7 +70,7 @@ const rack = {
         }
 
         // Update the letters placed
-        this.updateLettersPlaced(cellX, cellY);
+        this.updateLettersPlaced(cellX, cellY, letter, isStar);
 
         // Clear the rack tile cell
         let rackCell = document.getElementById(`rackCell${this.currentRackTile}`);
@@ -81,9 +83,10 @@ const rack = {
         this.currentRackTile = -1;
     },
 
-    updateLettersPlaced(cellX, cellY) {
+    updateLettersPlaced(cellX, cellY, letter, isStar) {
         let placedItem = {
-            letter: this.racks[0][this.currentRackTile],
+            letter: letter,
+            isStar: isStar,
             cellX: cellX,
             cellY: cellY,
             rackCell: this.currentRackTile
@@ -95,7 +98,8 @@ const rack = {
         let letter = event.currentTarget.innerText;
  
         // Update the letters placed
-        this.updateLettersPlaced(cellX, cellY);
+        let isStar = true;
+        this.updateLettersPlaced(cellX, cellY, letter, isStar);
 
         // Clear the rack tile cell
         let rackCell = document.getElementById(`rackCell${this.currentRackTile}`);
@@ -110,15 +114,19 @@ const rack = {
     },
 
     returnTile(cellData) {
+        let isStar = false;
         let letter = cellData.letter;
-        if (cellData.starTile) letter = "*";
+        if (cellData.starTile) {
+            isStar = true;
+            letter = "*";
+        }
         // Remove and get the placed letter
         // Find the placed letter
         let found = false;
         let temp = [];
         let rackCell = -1;
         for (let i = 0; i < this.lettersPlaced[0].length; i++) {
-            if (this.lettersPlaced[0][i].letter === letter) {
+            if (this.lettersPlaced[0][i].letter === letter || (isStar && this.lettersPlaced[0][i].isStar)) {
                 found = true;
                 rackCell = this.lettersPlaced[0][i].rackCell;
             }
@@ -135,5 +143,49 @@ const rack = {
         // Add the letter back to the rack
         this.displayTile(rackCell);
 
-    }
+    },
+
+    checkForTileOnStartSquare() {
+        let found = false;
+        for (let item of this.lettersPlaced[0]) {
+            if (item.cellX === board.starCellX0 && item.cellY === board.starCellY0) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    },
+
+    replenish (playerNum) {
+        let endOfGame = false;
+        let placed = this.lettersPlaced[playerNum];
+        let index = 0;
+        for (let item of placed) {
+            let rackCell = item.rackCell;
+            // Choose a letter from the tileSet
+            let letter = "";
+            if (tileSet.tileHold.length > 0) {
+                letter = tileSet.tileHold.pop();
+            }
+            this.racks[playerNum][rackCell] = letter;
+            ++index;
+        }
+
+        // Check whether there are any tiles in the rack
+        let letterCount = 0;
+        for (let letter of this.racks[playerNum]) {
+            if (letter === "") ++letterCount;
+        }
+        if (letterCount >= this.rackLength) {
+            endOfGame === true;
+        }
+
+        this.displayTiles();
+
+        // Cleared placed items list
+        this.lettersPlaced[playerNum] = [];
+        this.currentRackTile = -1;
+
+        return endOfGame;
+    },
 }

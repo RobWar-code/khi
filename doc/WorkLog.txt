@@ -4,7 +4,7 @@ Jobs Due
 
     Play Word Analysis
 
-    Do word list first letter index
+    Do word list letter indexes 
 
     Do tile checks
         * All orthogonal

@@ -7,6 +7,8 @@ Contents
     Logic Flow
     Tile Play Actions
     Play Word Actions
+    Word List and Word Indexing
+    Schedule
 
 <h1>Introduction and Game Play
     Khi is a board-based crossword game for two players (computer and human).
@@ -123,5 +125,35 @@ Contents
     Clear the background highlight from each letter laid
     Change the background color of each newly created and
 
-    
+<h1>Word List and Word Indexing
 
+    The word list used is that supplied from npm. This is
+    a lowercase list of English words that excludes single
+    letter words.
+
+    Three indexes are built from the word list, using the
+    initial 2, 3 and 4 characters of each word of the 
+    word list. The lengths of these indexes are 26 ^ n
+    items and allow for the calculation of the keyed
+    index offset. Word list pointers in the indexes are 
+    either null or point to the array offset of the
+    start of the matched set.
+
+    A general purpose word search is supplied which
+    checks the length of the word to decide which
+    index to use.
+
+    Note that it may be better to supply the indexes
+    pre-built.
+
+<h1>Schedule
+
+Start Date: 08/10/2025
+
+                                    Est              Actual
+Board and Rack Layout               2 days           2 days
+Board Play                          1 day            1 day
+Player Tiles Played Validation      3 days      
+Word list and indexing              3 days
+Computer turns                      14 days
+Trials and Adjustments              10 days

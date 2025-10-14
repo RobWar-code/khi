@@ -4,6 +4,10 @@ const board = {
     boardHeight: 19,
     starCell1: 0,
     starCell2: 0,
+    starCellX0: 0,
+    starCellY0: 0,
+    starCellX1: 0,
+    starCellY1: 0,
 
     boardData: [],
 
@@ -16,8 +20,11 @@ const board = {
         let boardElem = document.getElementById("board");
         let html = "";
         let cellNum = 0;
-        let starCellY = Math.floor(this.boardHeight/2);
-        this.starCell1 = starCellY * this.boardWidth;
+        this.starCellY0 = Math.floor(this.boardHeight/2);
+        this.starCellX0 = 0;
+        this.starCellY1 = this.starCellY0;
+        this.starCellX1 = this.boardWidth - 1;
+        this.starCell1 = this.starCellY0 * this.boardWidth;
         this.starCell2 = this.starCell1 + this.boardWidth - 1;
         for (let row = 0; row < this.boardWidth; row++) {
             html += "<tr>";
@@ -91,11 +98,38 @@ const board = {
         };
         this.boardData[cellY][cellX] = cellItem;
 
+        this.displayTile(cellX, cellY);
+    },
+
+    displayTile(cellX, cellY) {
+        let item = this.boardData[cellY][cellX];
+        let background = "#d09000";
+        if (item.temp) {
+            background = "#40f040";
+        }
+        else if (item.lastCompLay) {
+            background = "#a04040";
+        }
+        let letter = item.letter;
+
+        let tileClass = "boardTileBlue";
+        if (item.playerNum === 1) tileClass = "boardTileBlack";
+
         let cellNum = cellY * this.boardWidth + cellX;
         let cellId = "cell" + cellNum;
         let cellElem = document.getElementById(cellId);
-        cellElem.style.backgroundColor = "#40f040";
-        cellElem.innerHTML = `<div class="boardTileBlue">${letter}</div>`;
+        cellElem.style.backgroundColor = background;
+        cellElem.innerHTML = `<div class="${tileClass}">${letter}</div>`;
+
+    },
+
+    clearTemp(placed) {
+        for (let item of placed) {
+            let cellX = item.cellX;
+            let cellY = item.cellY;
+            this.boardData[cellY][cellX].temp = false;
+            this.displayTile(cellX, cellY);
+        }
     },
 
     clearCell(cellX, cellY) {
@@ -138,7 +172,6 @@ const board = {
         let lastStepCoord = -1;
         for (let tile of placed) {
             let stepCoord = tile[coord[1]];
-            console.log("stepCoord:", stepCoord);
             if (index > 0) {
                 if (stepCoord - lastStepCoord > 1) {
                     // Check the board for a letter;
@@ -164,5 +197,182 @@ const board = {
             ++index;
         }
         return "";
+    },
+
+    checkWordJoins(placed, playerNum) {
+        let adj = [
+            [-1, 0],
+            [0, -1],
+            [1, 0],
+            [0, 1]
+        ];
+        let joins = [];
+        let ownJoin = false;
+        let index = 0;
+        for (let item of placed) {
+            let cellX = item.cellX;
+            let cellY = item.cellY;
+            // Check neighbouring cells
+            for (let adjcell of adj) {
+                let ax = adjcell[0];
+                let ay = adjcell[1];
+                let x = cellX + ax;
+                let y = cellY + ay;
+                if (x > 0 && x < this.boardWidth && y > 0 && y < this.boardHeight) {
+                    let cell = this.boardData[y][x];
+                    if (cell.letter != "" && !cell.temp) {
+                        let ownJoinSet = false;
+                        if (cell.playerNum === playerNum) {
+                            ownJoin = true;
+                            ownJoinSet = true;
+                        }
+                        joins.push({
+                            placedIndex: index,
+                            adjCell: adjcell,
+                            ownJoin: ownJoinSet
+                        });
+                    }
+                }
+            }
+            ++index;
+        }
+        return {joins: joins, ownJoin: ownJoin};
+    },
+
+    getJoins (cellX, cellY) {
+        let adj = [
+            [-1, 0],
+            [0, -1],
+            [1, 0],
+            [0, 1]
+        ];
+        let joins = [];
+        for (let adjcell of adj) {
+            let ax = adjcell[0];
+            let ay = adjcell[1];
+            let x = cellX + ax;
+            let y = cellY + ay;
+            if (x > 0 && x < this.boardWidth && y > 0 && y < this.boardHeight) {
+                let cell = this.boardData[y][x];
+                if (cell.letter != "" && !cell.temp) {
+                    joins.push({
+                        x: x,
+                        y: y,
+                        adjCell: adjcell
+                    });
+                }
+            }
+        }
+        return joins;
+    },
+
+    extractWords(placed, joins, orthogonal) {
+        let newWords = [];
+        let crossedWords = [];
+        let joinsDone = new Array(joins.length).fill(false);
+        let index = 0;
+        for (let join of joins) {
+            if (!joinsDone[index]) {
+                let placedIndex = join.placedIndex;
+                let cellX = placed[placedIndex].cellX;
+                let cellY = placed[placedIndex].cellY;
+                let adjCell = join.adjCell;
+                let joinDirection = "vertical";
+                if (adjCell[0] != 0) joinDirection = "horizontal";
+                // Check for crossed word
+                if (joinDirection === orthogonal) {
+                    // Check there is more than one letter
+                    // on the connected rightangle
+                    let x = cellX + adjCell[0];
+                    let y = cellY + adjCell[1];
+                    let direction = joinDirection === "horizontal" ? "vertical" : "horizontal";
+                    let wordObj = this.scanWord(x, y, direction);
+                    if (wordObj.word.length > 1) {
+                        crossedWords.push(wordObj);
+                    }
+                }
+                else {
+                    // Check for new words (those that join through the player's letters)
+                    let direction = orthogonal === "horizontal" ? "vertical" : "horizontal";
+                    let wordObj = this.scanWord(cellX, cellY, direction);
+                    if (wordObj.word.length > 1) {
+                        newWords.push(wordObj);
+                    }
+                    // Flag out the opposite side of the join (if present)
+                    for (let i = index + 1; i < joins.length && i < index + 2; i++) {
+                        if (joins[i].placedIndex === join.placedIndex) joinsDone[i] = true;
+                    }
+                }
+            }
+            ++index;
+        }
+
+        // Scan Primary Word
+        let x = placed[0].cellX;
+        let y = placed[0].cellY;
+        let wordObj = this.scanWord(x, y, orthogonal);
+        newWords.push(wordObj);
+
+
+        return {newWords: newWords, crossedWords: crossedWords};
+    },
+
+    scanWord(x, y, direction) {
+        let word = this.boardData[y][x].letter;
+        let startX = -1;
+        let startY = -1;
+        let endX = -1;
+        let endY = -1;
+        let step = [-1, 1];
+        for (let i = 0; i < 2; i++) {
+            let noLetter = false;
+            let edge = false;
+            let ny = y;
+            let nx = x;
+            while(!noLetter && !edge) {
+                let oldnx = nx;
+                let oldny = ny;
+                if (direction === "horizontal") {
+                    nx += step[i];
+                }
+                else {
+                    ny += step[i];
+                }
+                if (nx < 0 || nx >= this.boardWidth || ny < 0 || ny >= this.boardWidth) {
+                    edge = true;
+                    if (i === 0) {
+                        startX = oldnx;
+                        startY = oldny;
+                    }
+                    else {
+                        endX = oldnx;
+                        endY = oldny;
+                    }
+                }
+                else {
+                    let letter = this.boardData[ny][nx].letter;
+                    if (letter === "") {
+                        noLetter = true;
+                        if (i === 0) {
+                            startX = oldnx;
+                            startY = oldny;
+                        }
+                        else {
+                            endX = oldnx;
+                            endY = oldny;
+                        }
+                    }
+                    else {
+                        if (step === -1) {
+                            word = letter + word;
+                        }
+                        else {
+                            word += letter;
+                        }
+                    }
+                }
+            }
+        }
+        return {word: word, startX: startX, endX: endX, startY: startY, endY: endY};
     }
 }
