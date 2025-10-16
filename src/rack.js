@@ -188,4 +188,22 @@ const rack = {
 
         return endOfGame;
     },
+
+    changeTiles(playerNum) {
+        // Check that there are enough tiles in the hold
+        if (tileSet.tileHold.length < 1) {
+            let message = "The tile hold is empty so you cannot change tiles - try Pass";
+            game.statusReport(message);
+            return false;
+        }
+
+        // if playerNum === 0; clear any played tiles from the board
+
+        let rack = this.racks[playerNum];
+        let newRack = tileSet.changeTiles(rack);
+        this.racks[playerNum] = newRack;
+        game.penalties[playerNum] += 10;
+
+        // If playerNum === 0; re-display the rack
+    }
 }

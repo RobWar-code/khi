@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/styles/styles.css">
+</head>
+<body>
+    <h1>Test Platform</h1>
+    <p id="result0"></p>
+    <p id="result1"></p>
+    <p id="result2"></p>
+    <p id="result3"></p>
+
+<script src="src/game.js"></script>
+<script src="src/computer.js"></script>
+<script src="src/board.js"></script>
+<script src="src/rack.js"></script>
+<script src="src/tileSet.js"></script>
+<script src="src/wordFuncs.js"></script>
+<script>
+    // testVowelCount();
+
+    testComputerFirstWord();
+
+    async function testComputerFirstWord() {
+        await wordFuncs.loadWordList();
+        tileSet.fillTileHold();
+
+        let rack = "ABCDFGH";
+        computer.firstWordTwoLetter(rack);
+        console.log("found:", computer.foundCount);
+        console.log("not found:", computer.unmatchedCount);
+        console.log("words:", computer.matchedWords);
+    }
+
+    function testVowelCount() {
+        let words = [
+            "nbvfghrst",
+            "hgfarstvwnm",
+            "bc*lmnakm"
+        ];
+        let count = 0;
+        for (let s of words) {
+            let vowelCount = computer.countVowels(s);
+            let id = "result" + count;
+            document.getElementById(id).innerText = vowelCount;
+            ++count;
+        }
+    }
+</script>
+</body>
+</html>

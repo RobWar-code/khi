@@ -103,9 +103,9 @@ const board = {
 
     displayTile(cellX, cellY) {
         let item = this.boardData[cellY][cellX];
-        let background = "#d09000";
+        let background = "#908000";
         if (item.temp) {
-            background = "#40f040";
+            background = "#f0a0a0";
         }
         else if (item.lastCompLay) {
             background = "#a04040";
@@ -132,6 +132,29 @@ const board = {
         }
     },
 
+    changeColours(wordSet, playerNum) {
+        for (let wordItem of wordSet) {
+            let startX = wordItem.startX;
+            let endX = wordItem.endX;
+            let startY = wordItem.startY;
+            let endY = wordItem.endY;
+            let dy = 0;
+            let dx = 0;
+            if (startX === endX) dy = 1;
+            else dx = 1;
+            let cellX = startX;
+            let cellY = startY;
+            let word = wordItem.word;
+            for (let i = 0; i < word.length; i++) {
+                let c = word[i];
+                this.boardData[cellY][cellX].playerNum = playerNum;
+                this.displayTile(cellX, cellY);
+                cellX += dx;
+                cellY += dy;
+            }
+        }
+    },
+
     clearCell(cellX, cellY) {
         let cellItem = {
             letter: "",
@@ -150,7 +173,7 @@ const board = {
             // Show star start symbol
             cellElem.innerHTML = `<img src="assets/boardStar2.png" width="17" height="17">`;
         }
-        cellElem.style.backgroundColor = "#d09000";
+        cellElem.style.backgroundColor = "#908000";
     },
 
     checkOrthogonalGaps(placed, orthogonal) {
@@ -218,9 +241,9 @@ const board = {
                 let ay = adjcell[1];
                 let x = cellX + ax;
                 let y = cellY + ay;
-                if (x > 0 && x < this.boardWidth && y > 0 && y < this.boardHeight) {
+                if (x >= 0 && x < this.boardWidth && y >= 0 && y < this.boardHeight) {
                     let cell = this.boardData[y][x];
-                    if (cell.letter != "" && !cell.temp) {
+                    if (cell.letter != "" && cell.temp === false) {
                         let ownJoinSet = false;
                         if (cell.playerNum === playerNum) {
                             ownJoin = true;
@@ -252,9 +275,9 @@ const board = {
             let ay = adjcell[1];
             let x = cellX + ax;
             let y = cellY + ay;
-            if (x > 0 && x < this.boardWidth && y > 0 && y < this.boardHeight) {
+            if ((x >= 0 && x < this.boardWidth) && (y >= 0 && y < this.boardHeight)) {
                 let cell = this.boardData[y][x];
-                if (cell.letter != "" && !cell.temp) {
+                if (cell.letter != "" && cell.temp === false) {
                     joins.push({
                         x: x,
                         y: y,
@@ -363,7 +386,7 @@ const board = {
                         }
                     }
                     else {
-                        if (step === -1) {
+                        if (step[i] === -1) {
                             word = letter + word;
                         }
                         else {

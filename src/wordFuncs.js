@@ -45,6 +45,7 @@ const wordFuncs = {
         for (let i = 0; i < twoCharIndexLen; i++) {
             this.twoCharIndex.push(null);
         }
+        console.log("makeTwoCharIndex", this.twoCharIndex.length);
 
         let index = 0;
         let lastIndexCode = -1;
@@ -116,6 +117,17 @@ const wordFuncs = {
         return indexCode;
     },
 
+    validateWords(wordSet) {
+        let invalid = [];
+        for (let wordItem of wordSet) {
+            let word = wordItem.word;
+            if (this.indexFindWord(word) === false) {
+                invalid.push(word);
+            }
+        }
+        return invalid;
+    },
+
     indexFindWord(word) {
         let found = false;
         let lookup;
@@ -154,6 +166,37 @@ const wordFuncs = {
             }        
         }
         return found;
+    },
+
+    searchIndex(combo) {
+        let keyLen = combo.length;
+        let indexCode = this.getIndexCode(combo, keyLen);
+        console.log("indexCode:", indexCode, keyLen, this.twoCharIndex.length);
+        let offset = -1;
+        switch(keyLen) {
+            case 2:
+                offset = this.twoCharIndex[indexCode];
+                break;
+            case 3:
+                offset = this.threeCharIndex[indexCode];
+                break;
+            case 4:
+                offset = this.fourCharIndex[indexCode];
+                break;
+            default:
+                throw error("searchIndex - invalid key length:", combo);
+        } 
+        console.log("offset:", offset);
+        let isWord = false;
+        let found = false;
+        if (offset != null && offset != -1) {
+            // Check whether the combo is a word
+            if (this.wordList[offset] === combo) {
+                isWord = true;
+            } 
+            found = true;
+        }
+        return {found: found, isWord: isWord};
     },
 
     testSearch() {

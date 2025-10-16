@@ -7,6 +7,10 @@ Contents
     Logic Flow
     Tile Play Actions
     Play Word Actions
+    Computer Play
+        Test Setup
+        First Word
+        Subsequent Words
     Word List and Word Indexing
     Schedule
 
@@ -17,8 +21,8 @@ Contents
     The aim of the game is for the two players to begin their crosswords
     on opposite sides of the board and to attempt to reach the opposite
     side before their opponent (or the tile hold is emptied for a draw). 
-    Game points are achieved by attaining this goal with the minimum possible 
-    number of letter tiles.
+    Game points are achieved by capturing as many of the opponents tiles
+    as possible.
 
     Letter tiles are dealt to each player, with the number of tiles being
     maintained at 7 as words are played to the board so long as enough
@@ -124,6 +128,73 @@ Contents
     data.
     Clear the background highlight from each letter laid
     Change the background color of each newly created and
+
+<h1>Computer Play
+
+    In general computer word attempts are scored by the
+    following:
+        1) Number of opponent's tiles captured
+        2) Proximity to winning edge (furthest left)
+        3) Tally of letter scores, so that rare letters are used first
+
+<h2>Test Setup
+
+    Testing of the computer logic should be set-up using HTML
+    cover scripts in the root directory, ie:
+        testOps1.html 
+        testOps2.html
+
+
+
+<h2>First Word
+    The first word composed by the computer ends on the
+    starred square on the right hand side of the board.
+    It is generally the longest word that can be formed
+    from the left by playing the combination of letters.
+
+    First check to see if there are any vowels in the
+    set of letters "aeiouy*"
+
+    If there are no vowels: 
+        change the letters.
+        start again
+    
+    Create a letter list of the rack tiles
+    For each letter in the sorted list:
+        If the letter is not the same as the last:
+            Use this letter as the first letter
+            Select the second letter from the other letters
+            missing-out star chars if the first is a star
+
+    Using the selected pair
+    If the first is a star do the following for each letter
+    of the alphabet, otherwise, use the pair.
+        Search the two letter index for the pair
+        If there is an entry for the pair:
+            If the pair is a word, push the word onto the candidate stack
+            and score it (addWordToCandidates())
+            Make the three letter combinations from
+            this pair and those remaining in the rack
+            For each three letter combination
+                Search the three letter index for the combination
+                If the combination exists
+                    If the set of three is a word - addWordToCandidates()
+                    Make the four letter combinations from this
+                    set of three
+                    For each four letter combination
+                        Search the four letter index
+                        IF there are entries
+                            If the four letter word exists - addWordToCandidates()
+                            for each of the word list words with this combination
+                                Check if the word is 7 or less letters
+                                Check whether the remaining letters appear in the rack
+                                Consume star letters when not
+                                If word matched - addWordToCandidates
+                    Next four letter combination allow for *
+                else
+                    Move to the next three letter combination (allow for *)
+        else 
+            Move to the next pair (allow for *)
 
 <h1>Word List and Word Indexing
 

@@ -2,24 +2,40 @@ Work Log
 
 Jobs Due
 
-    Play Word Analysis
+    Do Computer Play Analysis
 
-    Do word list letter indexes 
+    Allow for computer game finished after change tiles on first word
 
-    Do tile checks
-        * All orthogonal
-        * All Orthogonal Joined
-        Attached to existing words
-            Attached to own colour
-        Collect set of new words
-            end to end on the orthogonal
-            all other words at right angles
-        Check whether each word exists
+    Do player change tiles
+        Update the display
+
+    Do turn score tallying
 
     Do turn loop
 
 
 Jobs Done
+
+    15/10/2025
+
+    * Play Word Analysis
+
+    * Do word list letter indexes 
+
+    * Do tile checks
+
+        * Fix problem with joined word test at board edge
+
+        * All orthogonal
+        * All Orthogonal Joined
+        * Attached to existing words
+            * Attached to own colour
+        * Collect set of new words
+            * end to end on the orthogonal
+            * all other words at right angles
+        * Check whether each word exists
+
+    * Change word colors
 
     12/10/22
     
