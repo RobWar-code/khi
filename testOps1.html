@@ -27,11 +27,19 @@
         await wordFuncs.loadWordList();
         tileSet.fillTileHold();
 
-        let rack = "ABCDFGH";
+        // let rack = "ABCDFGH";
+        // let rack = "TINKERS";
+        let rack = "CR*YLST";
+        // let rack = "BCD*FGH";
+        // let rack = "B*CDF*G";
+        // let rack = "ABCDEFG";
+
         computer.firstWordTwoLetter(rack);
         console.log("found:", computer.foundCount);
         console.log("not found:", computer.unmatchedCount);
-        console.log("words:", computer.matchedWords);
+        console.log("hiCombo:", computer.hiCombo);
+        console.log("hiScore:", computer.hiScore);
+        console.log("hiCheckSet:", computer.hiCheckSet);
     }
 
     function testVowelCount() {

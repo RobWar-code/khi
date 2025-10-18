@@ -196,6 +196,8 @@ Contents
         else 
             Move to the next pair (allow for *)
 
+    The levels of indexing can be handled by a recursive function
+    
 <h1>Word List and Word Indexing
 
     The word list used is that supplied from npm. This is

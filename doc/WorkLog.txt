@@ -3,7 +3,19 @@ Work Log
 Jobs Due
 
     Do Computer Play Analysis
+        * First Word
+        Other Words
 
+    Do Computer Play First Word
+        * Two chars
+            * Do preserve highest scoring matched word
+        * First four chars
+        * Greater than four chars (wordList parsing)
+            * Test
+        Lay the completed word
+        Update the racks
+        Integrate the computer turn and first word logic
+        
     Allow for computer game finished after change tiles on first word
 
     Do player change tiles
