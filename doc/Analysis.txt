@@ -8,6 +8,8 @@ Contents
     Tile Play Actions
     Play Word Actions
     Computer Play
+        Computer Turn
+        Computer Word Selection 
         Test Setup
         First Word
         Subsequent Words
@@ -130,6 +132,48 @@ Contents
     Change the background color of each newly created and
 
 <h1>Computer Play
+
+<h2>Computer Turn
+    Set pass count = 0
+    Set change count = 0
+    Loop until a scoring word is found or the computer
+    passes or the letter change count is reached
+        If first word
+            If there are no vowels
+                Change the letters
+                Increment the change letters count
+            Else
+                Initialise word scores
+                do the first word selection
+                If no word found
+                    Change the letters
+                    Increment the change letters count
+                Else
+                    Set the word found flag
+        Else
+            Check whether there are any tiles in the rack
+            Else
+                Initialise word scores
+                ...Do board scan etc.
+                Decide on pass/change letters
+    End Loop
+    If the change letters count > max
+        Send a message to the display
+        Restart the game
+    Else if the pass flag 
+        Send a message to the display
+        Increment the pass count
+        Move to next turn
+    Else
+        Play the computer word to the board
+        Check for winning move
+        If not Winning Move
+            Replenish the computer rack
+            If there are no tiles left and the player has no tiles
+                Message to the display
+
+
+<h2>Computer Word Selection 
 
     In general computer word attempts are scored by the
     following:

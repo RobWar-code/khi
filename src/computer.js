@@ -35,48 +35,75 @@ const computer = {
     ],
     hiScore: 0,
     hiCheckSet: [],
-    hiCombo: "", 
+    hiCombo: "",
+    hiCellX: 0,
+    hiCellY: 0,
+    hiCellOrthogonal: "", 
 
     // Debug Vars
     foundCount: 0,
     unmatchedCount: 0,
 
     play() {
-        if (game.gameTurn === 0) {
-            playFirstWord();
-            return;
-        }
-    },
-
-    playFirstWord() {
-        let ownRack = rack.racks[playerNum];
-        // Check the rack letters for vowels
-        let noVowels = true;
-        let count = 0;
-        this.vowelCount = 0;
-        while (noVowels && count < 5) {
-            let vowelCount = this.countVowels(ownRack);
-            if (vowelCount > 0) {
-                noVowels = false;
-                this.vowelCount = vowelCount;
-                break;
+        this.hiScore = 0;
+        let passCount = 0;
+        let changeCount = 0;
+        let lettersFinished = false;
+        let pass = false;
+        let gotWord = false;
+        while (!gotWord && !pass && changeCount < 3 && !lettersFinished) {
+            let statusObj = {changeLetters: false, pass: false};
+            if (game.gameTurn === 0) {
+                statusObj = this.playFirst();
             }
             else {
-                rack.changeTiles(playerNum);
-                ownRack = rack.racks[playerNum];
+                // board.redisplayLastComputerWord();
+                // statusObj = this.playTurn();
             }
-            ++count;
-        }
-        if (noVowels) {
-            // End of Game actions - Report
-        }
 
-        // Do two letter combinations
-        this.firstWordTwoLetter(rack);
+            if (statusObj.lettersFinished) {
+                lettersFinished = true;
+            }
+            else if (statusObj.changeLetters) {
+                if (changeCount < 3) {
+                    rack.changeTiles(this.playerNum);
+                }
+                ++changeCount;
+            }
+            else if (statusObj.pass) {
+                pass = true;
+            }
+            else if (this.hiScore > 0) {
+                gotWord = true;
+                // Display Word
+                board.displayComputerWord()
+            }
+        }
     },
 
-    firstWordTwoLetter(rackSet) {
-        rackSet = rackSet.toLowerCase();
+    playFirst() {
+        let ownRack = rack.racks[this.playerNum].toLowerCase();
+        // Check the rack letters for vowels
+        let vowelCount = this.countVowels(ownRack);
+        if (vowelCount === 0) {
+            // Check rack for "h"
+            let gotH = ownRack.indexOf("h");
+            let gotC = false;
+            let gotS = false;
+            if (gotH) {
+                gotC = ownRack.indexOf("c");
+                gotS = ownRack.indexOf("s");
+            }
+            if (!(gotH && (gotC || gotS))) {
+                return {lettersFinished: false, pass: false, changeLetters: true}
+            }
+        }        
+
+        // Do two letter combinations
+        this.getFirstWord(ownRack);
+    },
+
+    getfirstWord(rackSet) {
         let checkSet = [];
         let good = false;
         // Compose the checkSet

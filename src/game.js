@@ -1,6 +1,7 @@
 const game = {
     gameTurn: 0,
     penalties: [0, 0],
+    passCount: 0,
 
     playWord(player) {
         // If this is first turn, ensure that a tile is on the start square
