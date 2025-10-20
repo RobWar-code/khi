@@ -39,6 +39,8 @@ const computer = {
     hiCellX: 0,
     hiCellY: 0,
     hiCellOrthogonal: "", 
+    hiNewWords: [],
+    hiCrossWords: [],
 
     // Debug Vars
     foundCount: 0,
@@ -46,13 +48,13 @@ const computer = {
 
     play() {
         this.hiScore = 0;
-        let passCount = 0;
         let changeCount = 0;
         let lettersFinished = false;
+        let gameComplete = false;
         let pass = false;
         let gotWord = false;
         while (!gotWord && !pass && changeCount < 3 && !lettersFinished) {
-            let statusObj = {changeLetters: false, pass: false};
+            let statusObj = {lettersFinished: false, changeLetters: false, pass: false, gameComplete: false};
             if (game.gameTurn === 0) {
                 statusObj = this.playFirst();
             }
@@ -75,18 +77,38 @@ const computer = {
             }
             else if (this.hiScore > 0) {
                 gotWord = true;
+                if (game.gameTurn === 0) {
+                    this.firstWordSetLettersPlaced();
+                }
                 // Display Word
-                board.displayComputerWord()
+                this.setComputerWord();
+                lettersFinished = this.replenishRack();
             }
         }
+        if (gameComplete) {
+            // Do game complete actions
+        }
+        if (lettersFinished) {
+            // Do end of game, all letters used
+        }
+        // Possibly return end of game conditions
     },
 
     playFirst() {
-        let ownRack = rack.racks[this.playerNum].toLowerCase();
+        let rackTemp = rack.racks[this.playerNum];
+        // Create the string of rack letters
+        let ownRack = "";
+        for (let c of rackTemp) {
+            if (c != "") {
+                ownRack += c.toLowerCase();
+            }
+        }
+
+        console.log("rack:", ownRack);
         // Check the rack letters for vowels
         let vowelCount = this.countVowels(ownRack);
         if (vowelCount === 0) {
-            // Check rack for "h"
+            // Check rack for "h" - "sh" and "ch"
             let gotH = ownRack.indexOf("h");
             let gotC = false;
             let gotS = false;
@@ -95,15 +117,16 @@ const computer = {
                 gotS = ownRack.indexOf("s");
             }
             if (!(gotH && (gotC || gotS))) {
-                return {lettersFinished: false, pass: false, changeLetters: true}
+                return {lettersFinished: false, pass: false, changeLetters: true, gameComplete: false};
             }
         }        
 
         // Do two letter combinations
         this.getFirstWord(ownRack);
+        return {lettersFinished: false, pass: false, changeLetters: false, gameComplete: false};
     },
 
-    getfirstWord(rackSet) {
+    getFirstWord(rackSet) {
         let checkSet = [];
         let good = false;
         // Compose the checkSet
@@ -416,5 +439,43 @@ const computer = {
         }
         let score = this.letterScores[code].score; 
         return score;
+    },
+
+    replenishRack() {
+        // Returns whether all tiles used
+        return rack.replenish(this.playerNum);
+    },
+
+    setComputerWord() {
+        board.setComputerWord();
+    },
+
+    firstWordSetLettersPlaced() {
+        let len = this.hiCombo.length;
+        let cellY = board.starCellY1;
+        let cellX = board.starCellX1 - len + 1;
+        let placed = [];
+        for (let i = 0; i < this.hiCombo.length; i++) {
+            let c = this.hiCombo[i];
+            // Search the checkset
+            let found = false;
+            let rackCell = 0;
+            for (let item of this.hiCheckSet) {
+                if (item.currentSelection >= 0) {
+                    if (item.letter === c) {
+                        found = true;
+                        break;
+                    }
+                }
+                ++rackCell;
+            }
+            if (!found) {
+                console.error("Computer letter not found in check set:", this.hiCombo, this.hiCheckSet);
+                throw "program exit";
+            }
+            placed.push({rackCell: rackCell, letter: c, cellX: cellX, cellY: cellY});
+            ++cellX;
+        }
+        rack.lettersPlaced[this.playerNum] = placed;
     }
 }

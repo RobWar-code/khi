@@ -340,6 +340,26 @@ const board = {
         return {newWords: newWords, crossedWords: crossedWords};
     },
 
+    setComputerWord() {
+        let placed = rack.lettersPlaced[1];
+        for (let item of placed) {
+            let cellX = item.cellX;
+            let cellY = item.cellY;
+            this.boardData[cellY][cellX] = {
+                letter: item.letter.toUpperCase(),
+                starTile: false,
+                playerNum: 1,
+                temp: false,
+                lastCompLay: true
+            };
+            this.displayTile(cellX, cellY);
+        }
+        if (game.gameTurn > 0) {
+            // Claim adjoining words
+            // Requires: newWords, crossedWords - see game.playWord
+        }
+    },
+
     scanWord(x, y, direction) {
         let word = this.boardData[y][x].letter;
         let startX = -1;

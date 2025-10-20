@@ -12,7 +12,7 @@ Contents
         Computer Word Selection 
         Test Setup
         First Word
-        Subsequent Words
+        Nonfirst Words
     Word List and Word Indexing
     Schedule
 
@@ -188,8 +188,6 @@ Contents
         testOps1.html 
         testOps2.html
 
-
-
 <h2>First Word
     The first word composed by the computer ends on the
     starred square on the right hand side of the board.
@@ -241,7 +239,165 @@ Contents
             Move to the next pair (allow for *)
 
     The levels of indexing can be handled by a recursive function
-    
+
+<h2>Nonfirst Words
+    The general aim is search upto five own-tile locations for
+    the best computer word score.
+
+    board.initPlayPositions();
+    let positionCount = 0;
+    let positionFound = true;
+    while (positionCount < this.maxPositionCount && positionFound) {
+        // Get the next Playable Position
+        let posObj = board.findPlayCell(this.playerNum);
+        if (posObj.found) {
+            get the position object from posObj
+            for each valid position
+                set-up the checkSet for the rack tiles
+                let gotValidWords = []; // Flags for vertical ok and horizontal ok
+                for each orthogonal direction (vertical, horizontal)
+                    clear the test tiles from the board data
+                    set tally of letters used
+                    for each letter of the check set
+                        if the letter has not already been used
+                            loop through alphabet if a star
+                                get the first test letter from the checkset
+                                place the first test letter on the board data
+                                scan the word starting at root position
+                                if the test word is more than two chars long, flag it as compulsory
+                                test whether the word exists or is found
+                                if the word exists, add it to the high score
+                                if the word is found as a start position
+                                    while valid word and not all check set letters used and not board edge
+                                        tag letter from the check set on to the end
+                                        scan word in the orthogonal
+                                        if the word is longer than the test word, adjust the test word
+                                        scan word at the right angle
+                                        if the right angle word is greater than 1 char 
+                                            check whether it exists
+                                            if it makes a new word, score it and and it to the new word list
+                                        if it does not exist, withdraw the letter placed
+                                        else 
+                                            score the test word
+                                            if the test word exists
+                                                get the crossed words for this word 
+                                                add it to the new words and hi-scores for this
+                                                position
+
+                                    // tag letters from the checkset on to the start of the original test word
+                                    while checkset letters not all used and valid right-angle word
+                                        add a letter from the check set to the start of the original test word
+                                        scan the word in the orthogonal
+                                        if the word is found
+                                            scan the word from right angle from the letter
+                                            if the length of the scanned word is greater than 1
+                                            check whether the scanned word exists
+                                            abandon this checkset letter
+                                            else 
+                                                save the new word
+                                        
+                                            if the letter position is valid
+                                                check whether the orthogonal word exists
+                                                if the orthogonal word exists
+                                                    get crossed words
+                                                    add the orthogonal word to the new words
+                                                    add to hi scores
+
+                                                add letters from the checkset to the end of the word
+
+
+
+
+        }
+        else {
+            positionFound = false;
+        }
+    }
+
+    board.findPlayCell(playerNum){
+    board.positionCellX
+    board.positionCellY
+    board.playableCells [
+        {
+            ownTileX,
+            ownTileY,
+            validCells: [
+                {cellX, cellY}
+            ]
+        }
+    ]
+
+        The first task is to look for own tiles that can be joined to.
+        This should be done in most leftward order first.
+        The adjacent squares of the tile are checked in order (-x,-y,+x,+y)
+        to look for vacant squares.
+        The resultant set of coordinates is then added to a list.
+        The end position of this list is used to conduct the next search
+    }
+
+    addEndLetters(checkSetSrc, scanWord, scanWordData, orthogonal) {
+        let scanWordStack = []; // {scanWord, scanWordData}
+        note: the scan word data should include the count of black and blue letters
+
+        allow for stars in checkSet for words longer than four letters
+        record checkSetPtr
+    }
+
+    addEndLetter(checkSet, checkSetLetter, scanWord, scanWordData, orthogonal) {
+        add the test letter to the board
+        check the right-angle word
+        if the right-angle word does not exist
+            remove the test letter from the board
+            return {gotWord: false, found: false}
+
+        get the new scan word and scan data
+        if the new scan word length is <= 4
+            scan the indexes for the new scan word
+            if no match is found
+                return {gotWord: false, found: false}
+            if a word is found
+                score it, and if it is the highest, save it
+                set gotWord = true
+                set found = true
+            else
+                set found = true
+             
+        return {gotWord: gotWord, found: found, newScanWord: newScanWord, newScanWordData: newScanWordData}            
+        
+    }
+
+    scoreScanWord(checkSet, scanWord, scanWordData, word, orthogonal) {
+        newWords = [];
+        crossWords = [];
+
+        get the letter score from checkSet
+
+        get the scores for new words and crossed words
+        for each cell letter of the scanWord
+            scan the right-angle word
+            if > 1 letter
+                if the cell letter is black
+                    add the right-angle word to the new words
+                else
+                    add the right-angle word to the cross words
+                add the blue cell count for the right-angle word
+                to the score
+                save the left-most position of the right-angle word
+                check whether the left-most position is zero
+                if it is set the gotWin flag
+
+        add the scanWord blue cell count to the score
+        save the left-most position of the scan word
+        if the left-most position is zero set the gotWin flag
+
+        add the left-most position score to the score
+
+        if the score is higher than the hiScore,
+        record the hi details
+
+        return gotWin
+    }
+
 <h1>Word List and Word Indexing
 
     The word list used is that supplied from npm. This is

@@ -113,7 +113,7 @@ const game = {
         let endOfGame = rack.replenish(0);
 
         // Computer Play
-        // computer.play();
+        computer.play();
 
         ++this.gameTurn;
     },

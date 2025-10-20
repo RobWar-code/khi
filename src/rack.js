@@ -1,11 +1,11 @@
 
 const rack = {
     rackLength: 7,
-    racks: [],
+    racks: [], // Arrays of letters
     currentRackTile: -1,
     starCellX: -1,  // Holding for star cell letter selection
     starCellY: -1,
-    lettersPlaced: [[],[]],
+    lettersPlaced: [[],[]], // {rackCell, cellX, cellY, letter}
 
     fillRacks() {
         this.racks = [];
@@ -180,7 +180,9 @@ const rack = {
             endOfGame === true;
         }
 
-        this.displayTiles();
+        if (playerNum === 0) {
+            this.displayTiles();
+        }
 
         // Cleared placed items list
         this.lettersPlaced[playerNum] = [];
