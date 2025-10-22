@@ -335,15 +335,87 @@ Contents
         The end position of this list is used to conduct the next search
     }
 
-    addEndLetters(checkSetSrc, scanWord, scanWordData, orthogonal) {
-        let scanWordStack = []; // {scanWord, scanWordData}
+    makeCheckSet()
+
+    addEndLetters(levelData, startLevel, level, orthogonal) {
+        /*
+            levelData [ // upto rack.rackLength entries
+                {
+                    checkSet: {letter, star, currentSelection, selectionFlag},
+                    charsUsed: "",
+                    checkSetPtr: n,
+                    scanWord: ,
+                    scanWordData: ,
+                    letter: ,
+                    gotStar: ,
+                    starLetterCount: ,
+                    cellX: ,
+                    cellY: 
+                }
+            ]
+        */
         note: the scan word data should include the count of black and blue letters
 
-        allow for stars in checkSet for words longer than four letters
-        record checkSetPtr
+        checkSet = levelData[level].checkSet;
+        checkSetPtr = levelData[level].checkSetPtr;
+        while !gotWin && not end of checkSet
+            get next letter from checkSet
+            loop on star
+                next star char
+                {gotWin, found, scanWord, scanWordData} = addEndLetter(levelData, level, orthogonal);
+                if (found && !gotWin) {
+                    checkSet[checkSetPtr].currentSelection = level;
+                    {endOfLevels, beyondEdge} = getNextLevelCheckSet(levelData, level, orthogonal);
+                    if (!endOfLetters && !beyondEdge) {
+                        gotWin = addEndLetters (level + 1);
+                    }
+                }
+                else if (!gotWin) {
+                    get the next letter
+                }
+            if (!gotWin)
+                level = level - 1
+                return
+
+        else (beyond edge) {
+            --level
+        }
     }
 
-    addEndLetter(checkSet, checkSetLetter, scanWord, scanWordData, orthogonal) {
+    getNextLevelCheckSet(levelData, level, orthogonal) {
+        let newLevel = level + 1;
+        if (newLevel >= rack.rackLength) {
+            return {endOfLevels: true, beyondEdge: false};
+        }
+        // Get the new position from the scanWord data
+        let endX = levelData[level].scanWordData.endX;
+        let endY = levelData[level].scanWordData.endY;
+        if (orthogonal === "vertical") {
+            ++endY;
+        }
+        else {
+            ++endX;
+        }
+        if (endX >= board.boardWidth || endY >= board.boardHeight) {
+            return {endOfLevels: false, beyondEdge: true}
+        }
+        // Copy the checkSet from the old level
+        let checkSet = json.parse(json.stringify(levelData[level].checkSet));
+        // Clear selection Flags
+        for (let item of checkSet) {
+            item.selectionFlag = -1;
+        }
+        levelData[newLevel].checkSet = checkSet;
+        levelData[newLevel].checkSetPtr = 0;
+        levelData[newLevel].cellX = endX;
+        levelData[newLevel].cellY = endY;
+        levelData[newLevel].letter = "";
+        return {endOfLevels: false, beyondEdge: false};
+    }
+
+
+    addEndLetter(levelData, level, orthogonal) {
+        letter = levelData[level].letter;
         add the test letter to the board
         check the right-angle word
         if the right-angle word does not exist
@@ -351,6 +423,11 @@ Contents
             return {gotWord: false, found: false}
 
         get the new scan word and scan data
+        set found = false;
+        set gotWord = true;
+        set newScanWord = "";
+        set newScanData = {};
+
         if the new scan word length is <= 4
             scan the indexes for the new scan word
             if no match is found
@@ -362,11 +439,23 @@ Contents
             else
                 set found = true
              
+        else {
+            select the first four letters of the scanWord
+            search the index for the list of words matched
+            if (wordList.length > 0) {
+                search through the wordList for word beginning with the scan word
+                if found {
+                    set found = true;
+                    if matched word
+                        set gotWord = true;
+                }
+            }
+        }
         return {gotWord: gotWord, found: found, newScanWord: newScanWord, newScanWordData: newScanWordData}            
         
     }
 
-    scoreScanWord(checkSet, scanWord, scanWordData, word, orthogonal) {
+    scoreScanWord(levelData, level, word, orthogonal) {
         newWords = [];
         crossWords = [];
 
@@ -394,6 +483,7 @@ Contents
 
         if the score is higher than the hiScore,
         record the hi details
+        save/create the lettersPlaced data,
 
         return gotWin
     }
