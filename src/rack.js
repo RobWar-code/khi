@@ -2,6 +2,7 @@
 const rack = {
     rackLength: 7,
     racks: [], // Arrays of letters
+    rackNumChars: [0, 0],
     currentRackTile: -1,
     starCellX: -1,  // Holding for star cell letter selection
     starCellY: -1,
@@ -16,6 +17,7 @@ const rack = {
                 rack.push(l);
             }
             this.racks.push(rack);
+            this.rackNumChars[i] = this.rackLength;
         }
     },
 
@@ -176,6 +178,7 @@ const rack = {
         for (let letter of this.racks[playerNum]) {
             if (letter === "") ++letterCount;
         }
+        this.rackNumChars[playerNum] = this.rackLength - letterCount;
         if (letterCount >= this.rackLength) {
             endOfGame === true;
         }

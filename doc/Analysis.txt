@@ -13,6 +13,7 @@ Contents
         Test Setup
         First Word
         Nonfirst Words
+    Board Test Setup
     Word List and Word Indexing
     Schedule
 
@@ -244,6 +245,7 @@ Contents
     The general aim is search upto five own-tile locations for
     the best computer word score.
 
+<h3>Outline
     board.initPlayPositions();
     let positionCount = 0;
     let positionFound = true;
@@ -314,7 +316,20 @@ Contents
         }
     }
 
-    board.findPlayCell(playerNum){
+<h3>Routines
+    playTurn() {
+        gotWin = false;
+        positionCount = 0;
+        positionCellX = 0;
+        positionCellY = -1;
+        endOfPositions = false;
+        while (positionCount < 5 && !endOfPositions) {
+            let positionObj = findNextPlayCell(positionCellX, positionCellY);
+        }
+    }
+
+
+    board.findNextPlayCell(playerNum){
     board.positionCellX
     board.positionCellY
     board.playableCells [
@@ -335,7 +350,32 @@ Contents
         The end position of this list is used to conduct the next search
     }
 
-    makeCheckSet()
+    makeCheckSet() {
+        let checkSet = [];
+        // Add letters from rack, excluding stars
+        for (let item of rack.racks[this.playerNum]) {
+            if (item != "*" && item != "") {
+                checkSet.push {
+                    letter: item,
+                    star: false,
+                    currentSelection: -1,
+                    selectionFlag: -1,
+                }
+            }
+        }
+        // Add in the stars
+        for (let item of rack.racks[this.playerNum]) {
+            if (item === "*") {
+                checkSet.push {
+                    letter: item,
+                    star: true,
+                    currentSelection: -1,
+                    selectionFlag: -1,
+                }
+            }
+        }
+        return checkSet;
+    }
 
     addEndLetters(levelData, startLevel, level, orthogonal) {
         /*
@@ -384,7 +424,7 @@ Contents
 
     getNextLevelCheckSet(levelData, level, orthogonal) {
         let newLevel = level + 1;
-        if (newLevel >= rack.rackLength) {
+        if (newLevel >= rack.rackNumChars[this.playerNum]) {
             return {endOfLevels: true, beyondEdge: false};
         }
         // Get the new position from the scanWord data
@@ -487,6 +527,42 @@ Contents
 
         return gotWin
     }
+
+<h1>Board Test Setup
+
+    The board test setup is provided to enable the testing of
+    computer play with different crossword configurations.
+
+    The use of the board test data is established from index.html
+    when the game is loaded.
+
+    The board test data and routines are contained in the file
+    src/boardTest.js.
+
+    The routine responsible for loading the board test data and
+    displaying it is boardTest.init()
+
+    Data for the board is set out in an array of arrays of rows as 
+    follows:
+
+    testBoards [
+        [
+            "L0|  |  |  |  |A1 ..",
+            ..
+        ],
+    ]
+
+    Letters on the board are followed by the player number with a 
+    dividing | with empty cells having two spaces.
+
+    The board test data is scanned to make entries in board.boardData
+    table data. Letters are withdrawn from the tileset (allowing for stars)
+    as they are placed in the board data.
+
+    The game turn number is given by the programmer with the data.
+
+    It is assumed that the next turn is the user's turn, with the
+    computer play occurring subsequently.
 
 <h1>Word List and Word Indexing
 

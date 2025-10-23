@@ -60,7 +60,7 @@ const computer = {
             }
             else {
                 // board.redisplayLastComputerWord();
-                // statusObj = this.playTurn();
+                statusObj = this.playTurn();
             }
 
             if (statusObj.lettersFinished) {
@@ -193,6 +193,26 @@ const computer = {
         } // End First Char Loop
         good = true;
         return good;
+    },
+
+    playTurn() {
+        let gotWin = false;
+        let positionCount = 0;
+        let positionCellX = 0;
+        let positionCellY = -1;
+        let endOfPositions = false;
+        while (positionCount < 10 && !endOfPositions && !gotWin) {
+            // Get the next position
+            let positionObj = board.findNextOwnCell(this.playerNum, positionCellX, positionCellY);
+            if (positionObj.ownTileFound) {
+                console.log("positionObj:", positionObj);
+                throw "program exit";
+                ++positionCount;
+            }
+            else {
+                endOfPositions = true;
+            }
+        }
     },
 
     searchLevel(level, checkSetSrc, charPtr, combo, gotLevel0Star) {

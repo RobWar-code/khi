@@ -133,8 +133,10 @@
 <script src="src/rack.js"></script>
 <script src="src/tileSet.js"></script>
 <script src="src/wordFuncs.js"></script>
+<script src="src/boardTest.js"></script>
 <script>
     let gameStarted = false;
+    let testGame = true;
 
     // Events
     let introDismiss = document.getElementById("introDismiss");
@@ -142,7 +144,7 @@
 
     introDismiss.addEventListener('click', () => {
         if (!gameStarted) {
-            tileSet.startGame();
+            tileSet.startGame(testGame);
             gameStarted = true;
         }
         document.getElementById("introDiv").style.display = "none";

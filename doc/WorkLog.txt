@@ -2,6 +2,8 @@ Work Log
 
 Jobs Due
 
+    Analyse use of test data for the board and the play 
+    
     Do Computer Play Analysis
         * First Word
         Other Words

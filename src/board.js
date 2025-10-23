@@ -101,6 +101,14 @@ const board = {
         this.displayTile(cellX, cellY);
     },
 
+    displayBoard() {
+        for (let cellY = 0; cellY < this.boardHeight; cellY++) {
+            for (let cellX = 0; cellX < this.boardWidth; cellX++) {
+                this.displayTile(cellX, cellY);
+            }
+        }
+    },
+
     displayTile(cellX, cellY) {
         let item = this.boardData[cellY][cellX];
         let background = "#908000";
@@ -174,6 +182,53 @@ const board = {
             cellElem.innerHTML = `<img src="assets/boardStar2.png" width="17" height="17">`;
         }
         cellElem.style.backgroundColor = "#908000";
+    },
+
+    findNextOwnCell(playerNum, positionCellX, positionCellY) {
+
+        const adj = [
+            [-1, 0],
+            [1, 0],
+            [0, -1],
+            [0, 1]
+        ];
+        let validCells = [
+            // {cellX, cellY}
+        ];
+        // Look for own tile that can be joined to.
+        // most leftward order first.
+        let ownTileFound = false;
+        let gotEdge = false;
+        while (!ownTileFound && !gotEdge) {
+            // Get next cell
+            ++positionCellY;
+            if (positionCellY >= this.boardHeight) {
+                positionCellY = 0;
+                ++positionCellX;
+                if (positionCellX >= this.boardWidth) gotEdge = true;
+            }
+            if (!gotEdge) {
+                // If own tile
+                if (this.boardData[positionCellY][positionCellX].playerNum === playerNum) {
+                    // Check the adjacent squares
+                    for (let adjItem of adj) {
+                        let cellX = positionCellX + adjItem[0];
+                        let cellY = positionCellY + adjItem[1];
+                        if (cellX >= 0 && cellX < this.boardWidth && cellY >= 0 && cellY < this.boardHeight) {
+                            // Check whether empty cell
+                            if (this.boardData[cellY][cellX].letter === "") {
+                                validCells.push({cellX: cellX, cellY: cellY});
+                            }
+                        }
+                    }
+                    if (validCells.length > 0) {
+                        ownTileFound = true;
+                    }
+                }
+            }
+        }
+        return {gotEdge: gotEdge, ownTileFound: ownTileFound, cellX: positionCellX, 
+            cellY: positionCellY, validCells: validCells}
     },
 
     checkOrthogonalGaps(placed, orthogonal) {

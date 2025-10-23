@@ -31,8 +31,11 @@ const tileSet = {
     ],
     tileHold: [],
 
-    startGame() {
+    startGame(testGame) {
         this.fillTileHold();
+        if (testGame) {
+            boardTest.init();
+        }
         rack.fillRacks();
         rack.displayTiles();
     },
