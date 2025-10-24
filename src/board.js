@@ -417,6 +417,10 @@ const board = {
 
     scanWord(x, y, direction) {
         let word = this.boardData[y][x].letter;
+        let blueCount = 0;
+        let blackCount = 0;
+        if (this.boardData[y][x].playerNum === 0) ++blueCount;
+        else ++blackCount;
         let startX = -1;
         let startY = -1;
         let endX = -1;
@@ -449,6 +453,7 @@ const board = {
                 }
                 else {
                     let letter = this.boardData[ny][nx].letter;
+                    let playerNum = this.boardData[ny][nx].playerNum;
                     if (letter === "") {
                         noLetter = true;
                         if (i === 0) {
@@ -461,6 +466,7 @@ const board = {
                         }
                     }
                     else {
+                        playerNum === 0 ? ++blueCount : ++blackCount; 
                         if (step[i] === -1) {
                             word = letter + word;
                         }
@@ -471,6 +477,7 @@ const board = {
                 }
             }
         }
-        return {word: word, startX: startX, endX: endX, startY: startY, endY: endY};
+        return {word: word, startX: startX, endX: endX, startY: startY, endY: endY, 
+            blueCount: blueCount, blackCount: blackCount};
     }
 }

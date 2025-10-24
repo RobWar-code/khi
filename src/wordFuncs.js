@@ -129,6 +129,7 @@ const wordFuncs = {
 
     indexFindWord(word) {
         let found = false;
+        let gotStart = false;
         let lookup;
         let keyLen;
         if (word.length <= 2) {
@@ -156,6 +157,11 @@ const wordFuncs = {
                     break;
                 }
                 if (w1 > w) {
+                    if (w1.length > w.length) {
+                        if (w1.substring(0, w.length) === w) {
+                            gotStart = true;
+                        }
+                    }
                     break;
                 }
                 if (w1 === w) {
@@ -164,7 +170,7 @@ const wordFuncs = {
                 }
             }        
         }
-        return found;
+        return {found: found, gotStart: gotStart};
     },
 
     getWordList(combo, maxLen) {

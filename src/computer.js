@@ -196,6 +196,14 @@ const computer = {
     },
 
     playTurn() {
+        // Get number of levels
+        let numLevels = 0;
+        for (let c of rack.racks[this.playerNum]) {
+            if (c != "") {
+                ++numLevels;
+            }
+        }
+        let levelData = new Array(numLevels).fill(null);
         let gotWin = false;
         let positionCount = 0;
         let positionCellX = 0;
@@ -205,14 +213,359 @@ const computer = {
             // Get the next position
             let positionObj = board.findNextOwnCell(this.playerNum, positionCellX, positionCellY);
             if (positionObj.ownTileFound) {
-                console.log("positionObj:", positionObj);
-                throw "program exit";
+                // For each vacant cell adjacent to own tile
+                for (let adjCell of positionObj.validCells) {
+                    let wordsObj = this.addLetters(levelData, positionCellX, positionCellY, adjCell.cellX, adjCell.cellY);
+                    if (wordsObj.gotWin) {
+                        gotWin = true;
+                        break;
+                    }
+                }
                 ++positionCount;
             }
             else {
                 endOfPositions = true;
             }
         }
+    },
+
+    addLetters(levelData, ownCellX, ownCellY, adjCellX, adjCellY) {
+        // Determine orthogonal
+        let orthogonal = "vertical";
+        if (adjCellX != ownCellX) orthogonal = "horizontal";
+        // Get scan word data
+        let scanObj = board.scanWord(ownCellX, ownCellY, orthogonal);
+        // Check that scan word does not end at edge of board
+        if ((orthogonal === "vertical" && scanObj.endY < board.boardHeight - 1) || 
+            (orthogonal === "horizontal" && scanObj.endX < board.boardWidth - 1)) {
+            // Set the level data for downward or rightward search
+            // do the first checkSet
+            let checkSet = this.makeCheckSet();
+            levelData[0] = {
+                checkSetPtr: -1,
+                checkSet: checkSet,
+                charsUsed: "",
+                scanWord: scanObj.word,
+                scanData: {
+                    startX: scanObj.startX,
+                    startY: scanObj.startY,
+                    endX: scanObj.endX,
+                    endY: scanObj.endY,
+                },
+                cellX: adjCellX,
+                cellY: adjCellY
+            }
+            let level = 0;
+            let endObj = this.addEndLetters(levelData, level, orthogonal);
+            // Check for got win
+            // Prepare to do start chars
+            // Do right angle
+        }
+        else {
+            // Do the upward or leftward search
+        }
+    },
+
+    makeCheckSet() {
+        let checkSet = [];
+        // Add letters from rack, excluding stars
+        for (let item of rack.racks[this.playerNum]) {
+            if (item != "*" && item != "") {
+                checkSet.push({
+                    letter: item,
+                    star: false,
+                    currentSelection: -1,
+                    selectionFlag: -1,
+                });
+            }
+        }
+        // Add in the stars
+        for (let item of rack.racks[this.playerNum]) {
+            if (item === "*") {
+                checkSet.push({
+                    letter: item,
+                    star: true,
+                    currentSelection: -1,
+                    selectionFlag: -1,
+                });
+            };
+        }
+        return checkSet;
+    },
+
+    addEndLetters(levelData, level, orthogonal) {
+        /*
+            levelData [ // upto rack.rackLength entries
+                {
+                    checkSet: {letter, star, currentSelection, selectionFlag},
+                    charsUsed: "",
+                    checkSetPtr: n,
+                    scanWord: ,
+                    scanWordData: ,
+                    letter: ,
+                    cellX: ,
+                    cellY: 
+                }
+            ]
+        */
+        let checkSet = levelData[level].checkSet;
+        let checkSetPtr = levelData[level].checkSetPtr;
+        let charsUsed = levelData[level].charsUsed;
+        let gotWin = false;
+        while (!gotWin && checkSetPtr < checkSet.length) {
+            // get next letter from checkSet
+            let charFound = false;
+            let letter = "";
+            while (!charFound && checkSetPtr < checkSet.length) {
+                ++checkSetPtr;
+                if (checkSetPtr < checkSet.length) {
+                    if (checkSet[checkSetPtr].currentSelection < 0) {
+                        letter = checkSet[checkSetPtr].letter;
+                        if (checkSet[checkSetPtr].star) letter = "*";
+                        // Check whether the letter has been used before
+                        if (charsUsed.indexOf(letter) < 0) {
+                            charFound = true;
+                            charsUsed += letter;
+                        }
+                    }
+                } 
+            }
+            if (charFound) {
+                let starCount = 0;
+                let starMax = this.alphabet.length - 1;
+                if (letter != "*") starMax = 0;
+                while (starCount <= starMax && !gotWin) {
+                    if (starMax > 0) {
+                        letter = this.alphabet[starCount++];
+                    }
+                    let endLetterObj = this.addEndLetter(levelData, level, orthogonal);
+                    let found = endLetterObj.found;
+                    let gotWin = endLetterObj.gotWin;
+                    if (found && !gotWin) {
+                        // Flag the letter
+                        checkSet[checkSetPtr].currentSelection = level;
+                        // Set the new level data
+                        levelData[level] = {
+                            checkSet: checkSet,
+                            checkSetPtr: checkSetPtr,
+                            letter: letter,
+                            scanWord: endLetterObj.scanWord,
+                            scanWordData: endLetterObj.scanWordData
+                        }
+                        const {endOfLevels, beyondEdge} = this.getNextLevelCheckSet(levelData, level, orthogonal);
+                        if (!endOfLevels && !beyondEdge) {
+                            gotWin = this.addEndLetters(levelData, level + 1, orthogonal);
+                        }
+                        else {
+                            // get the next letter
+                        }
+                    }
+                    else {
+                        // get the next letter
+                    }
+                } // End while star/letter
+            } // End if got checkset char
+        } // End while !gotWin and got checkset char
+        // Remove the last checkset letter placed from the board
+        let cellX = levelData[level].cellX;
+        let cellY = levelData[level].cellY;
+        board.boardData[cellY][cellX] = {
+            letter: "",
+            playerNum: -1,
+            starTile: false,
+            temp: false,
+            lastCompLay: false
+        }
+        return {gotWin: gotWin};
+    },
+
+    addEndLetter(levelData, level, orthogonal) {
+        let letter = levelData[level].letter;
+        // add the test letter to the board
+        let cellX = levelData[level].cellX;
+        let cellY = levelData[level].cellY;
+        board.boardData[cellY][cellX] = {
+            letter: letter,
+            playerNum: this.playerNum,
+            starTile: false,
+            temp: false,
+            lastCompLay: false
+        }
+
+        // Check the right-angle word
+        let rightAngle = "horizontal";
+        if (orthogonal === "horizontal") {
+            rightAngle = "vertical";
+        }
+        let scanObj = board.scanWord(cellX, cellY, rightAngle);
+        let foundObj = wordFuncs.indexFindWord(scanObj.word);
+        let found = foundObj.found;
+        // if the right-angle word does not exist
+        if (!found) {
+            return {gotWord: false, found: false, gotWin: false}
+        }
+
+        // get the new scan word and scan data
+        scanObj = board.scanWord(cellX, cellY, orthogonal);
+        found = false;
+        let gotWord = false;
+        let newScanWord = scanObj.word;
+        let newScanData = {startX: scanObj.startX, endX: scanObj.endX, startY: scanObj.startY,
+            blueCount: scanObj.blueCount, blackCount: scanObj.blackCount
+        };
+
+        // Scan the word list
+        foundObj = wordFuncs.indexFindWord(newScanWord);
+        gotWord = foundObj.found;
+        found = foundObj.gotStart || gotWord;
+        // if no match is found
+        if (!found) {
+            return {gotWord: false, found: false, gotWin: false};
+        }
+        // if a word is found
+        if (gotWord) {
+            // score it, and if it is the highest, save it
+            gotWin = this.scoreScanWord(levelData, newScanWord, newScanData, level, word, orthogonal);
+        }
+        return {gotWin: gotWin, gotWord: gotWord, found: found, 
+            scanWord: newScanWord, scanData: newScanData}              
+    },
+
+
+    getNextLevelCheckSet(levelData, level, orthogonal) {
+        let newLevel = level + 1;
+        if (newLevel >= rack.rackNumChars[this.playerNum]) {
+            return {endOfLevels: true, beyondEdge: false};
+        }
+        // Get the new position from the scanWord data
+        let endX = levelData[level].scanWordData.endX;
+        let endY = levelData[level].scanWordData.endY;
+        if (orthogonal === "vertical") {
+            ++endY;
+        }
+        else {
+            ++endX;
+        }
+        if (endX >= board.boardWidth || endY >= board.boardHeight) {
+            return {endOfLevels: false, beyondEdge: true}
+        }
+        // Copy the checkSet from the old level
+        let checkSet = json.parse(json.stringify(levelData[level].checkSet));
+        // Clear selection Flags
+        for (let item of checkSet) {
+            item.selectionFlag = -1;
+        }
+        levelData[newLevel].checkSet = checkSet;
+        levelData[newLevel].checkSetPtr = 0;
+        levelData[newLevel].cellX = endX;
+        levelData[newLevel].cellY = endY;
+        levelData[newLevel].letter = "";
+        return {endOfLevels: false, beyondEdge: false};
+    },
+
+    scoreScanWord(levelData, level, word, scanData, orthogonal) {
+        let newWords = [];
+        let crossWords = [];
+        let totalScore = 0;
+        let gotWin = false;
+
+        // get the letter score from checkSet
+        let checkSet = levelData[level].checkSet;
+        let checkSetPtr = levelData[level].checkSetPtr;
+        let score = 0;
+        let count = 0;
+        for (let item of checkSet) {
+            let letter = "";
+            if (count === checkSetPtr || item.currentSelection) {
+                letter = item.letter.toLowerCase();
+                if (item.star) {
+                    letter = "*";
+                    score += this.letterScores[this.letterScores.length - 1].score;
+                }
+                else {
+                    let code = letter.charCodeAt(0);
+                    code -= wordFuncs.aCode;
+                    score += this.letterScores[code].score;
+                }
+            }
+            ++count;
+        }
+        totalScore += score;
+
+        // get the scores for new words and crossed words
+        let x = scanData.startX;
+        let y = scanData.startY;
+        let leftMostPosition = 100;
+        // for each cell letter of the scanWord
+        while (x <= scanData.endX && y <= scanData.endY) {
+            // Get the right angle
+            let rightAngle = "horizontal";
+            if (orthogonal === "horizontal") rightAngle = "vertical";
+            // scan the right-angle word
+            let scanObj = board.scanWord(x, y, rightAngle);
+            // if > 1 letter
+            if (scanObj.word.length > 1) {
+                // if the cell letter is black
+                if (board.boardData[y][x].playerNum === this.playerNum) {
+                    // add the right-angle word to the new words
+                    newWords.push({
+                        word: scanObj.word,
+                        startX: scanObj.startX,
+                        endX: scanObj.endX,
+                        startY: scanObj.startY,
+                        endY: scanObj.endY
+                    });
+                }
+                else {
+                    // add the right-angle word to the cross words
+                    crossWords.push({
+                        word: scanObj.word,
+                        startX: scanObj.startX,
+                        endX: scanObj.endX,
+                        startY: scanObj.startY,
+                        endY: scanObj.endY
+                    });
+                }
+
+                // add the blue cell count for the right-angle word to the score
+                totalScore += scanObj.blueCount;
+                // save the left-most position of the right-angle word
+                if (scanObj.startX < leftMostPosition) leftMostPosition = scanObj.startX;
+                // check whether the left-most position is zero
+                // if it is set the gotWin flag
+                if (leftMostPosition === 0) gotWin = true;
+            }
+            // Next cell letter
+            if (orthogonal === "horizontal") ++x;
+            else ++y;
+        }
+
+        // add the scanWord blue cell count to the score
+        totalScore += scanData.blueCount;
+        // save the left-most position of the scan word
+        if (scanData.startX < leftMostPosition) leftMostPosition = scanData.startX;
+        // if the left-most position is zero set the gotWin flag
+        if (leftMostPosition === 0) {
+            gotWin = true;
+        }
+
+        // add the left-most position score to the score
+        totalScore += board.boardWidth - leftMostPosition;
+
+        // if the score is higher than the hiScore,
+        if (totalScore > this.hiScore) {
+            // record the hi score details
+            this.hiScore = totalScore;
+            this.hiCheckSet = JSON.parse(JSON.stringify(checkSet));
+            this.hiCheckSet[checkSetPtr].currentSelection = level;
+            this.hiCombo = scanWord;
+            this.hiCellOrthogonal = orthogonal;
+            this.hiCellX = levelData[level].cellX;
+            this.hiCellY = levelData[level].cellY;
+            this.hiNewWords = newWords;
+            this.hiCrossWords = crossWords;
+        }
+        return gotWin;
     },
 
     searchLevel(level, checkSetSrc, charPtr, combo, gotLevel0Star) {

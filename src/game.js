@@ -97,7 +97,8 @@ const game = {
             for (let item of placed) {
                 word += item.letter;
             }
-            let found = wordFuncs.indexFindWord(word);
+            let foundObj = wordFuncs.indexFindWord(word);
+            let found = foundObj.found;
             if (!found) {
                 let message = word + " is not a valid word";
                 this.statusReport(message);

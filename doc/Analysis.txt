@@ -323,31 +323,56 @@ Contents
         positionCellX = 0;
         positionCellY = -1;
         endOfPositions = false;
-        while (positionCount < 5 && !endOfPositions) {
-            let positionObj = findNextPlayCell(positionCellX, positionCellY);
+        while (positionCount < 10 && !endOfPositions) {
+            // Get the next position
+            let positionObj = board.findNextOwnCell(this.playerNum, positionCellX, positionCellY);
         }
     }
+    
+    board.findNextOwnCell(playerNum, positionCellX, positionCellY){
 
-
-    board.findNextPlayCell(playerNum){
-    board.positionCellX
-    board.positionCellY
-    board.playableCells [
-        {
-            ownTileX,
-            ownTileY,
-            validCells: [
-                {cellX, cellY}
-            ]
+        const adj = {
+            [-1, 0],
+            [1, 0],
+            [0, -1]
+            [0, 1]
         }
-    ]
-
-        The first task is to look for own tiles that can be joined to.
-        This should be done in most leftward order first.
-        The adjacent squares of the tile are checked in order (-x,-y,+x,+y)
-        to look for vacant squares.
-        The resultant set of coordinates is then added to a list.
-        The end position of this list is used to conduct the next search
+        validCells: [
+            // {cellX, cellY}
+        ],
+        // Look for own tile that can be joined to.
+        // most leftward order first.
+        let ownTileFound = false;
+        let gotEdge = false;
+        while (!ownTileFound && !gotEdge) {
+            // Get next cell
+            ++positionCellY;
+            if (positionCellY >= this.boardHeight) {
+                positionCellY = 0;
+                ++positionCellX;
+                if (positionCellX >= this.boardWidth) gotEdge = true;
+            }
+            if (!gotEdge) {
+                // If own tile
+                if (this.boardData[positionCellY][positionCellX].playerNum === playerNum) {
+                    // Check the adjacent squares
+                    for (let adjItem of adj) {
+                        let cellX = positionCellX + adjItem[0];
+                        let cellY = positionCellY + adjItem[1];
+                        if (cellX >= 0 && cellX < this.boardWidth && cellY >= 0 && cellY < this.boardHeight) {
+                            // Check whether empty cell
+                            if (this.boardData[cellY][cellX].letter === "") {
+                                validCells.push{cellX, cellY};
+                            }
+                        }
+                    }
+                    if (validCells.length > 0) {
+                        ownTileFound = true;
+                    }
+                }
+            }
+        }
+        return {gotEdge: gotEdge, ownTileFound: ownTileFound, validCells: validCells}
     }
 
     makeCheckSet() {
@@ -377,7 +402,43 @@ Contents
         return checkSet;
     }
 
-    addEndLetters(levelData, startLevel, level, orthogonal) {
+    addLetters(levelData, ownCellX, ownCellY, adjCellX, adjCellY) {
+        // Determine orthogonal
+        let orthogonal = "vertical";
+        if (adjCellX != ownCellX) orthogonal = "horizontal";
+        // Get scan word data
+        let scanObj = board.scanWord(ownCellX, ownCellY, orthogonal);
+        // Check that scan word does not end at edge of board
+        if ((orthogonal === "vertical" && scanObj.endY < board.boardHeight - 1) || 
+            (orthogonal === "horizontal" && scanObj.endX < board.boardWidth - 1)) {
+            // Set the level data for downward or rightward search
+            // do the first checkSet
+            let checkSet = makeCheckSet();
+            levelData[0] = {
+                checkSetPtr: -1,
+                checkSet: checkSet,
+                scanWord: scanObj.word,
+                scanData: {
+                    startX: scanObj.startX;
+                    startY: scanObj.startY;
+                    endX: scanObj.endX;
+                    endY: scanObj.endY;
+                }
+                cellX: adjCellX;
+                cellY: adjCellY;
+            }
+            let level = 0;
+            let endObj = addEndLetters(levelData, level, orthogonal);
+            // Check for got win
+            // Prepare to do start chars
+            // Do right angle
+        }
+        else {
+            // Do the upward or leftward search
+        }
+    }
+
+    addEndLetters(levelData, level, orthogonal) {
         /*
             levelData [ // upto rack.rackLength entries
                 {
@@ -469,7 +530,7 @@ Contents
         set newScanData = {};
 
         if the new scan word length is <= 4
-            scan the indexes for the new scan word
+            scan the indexes for the new scan word - set scanWordData
             if no match is found
                 return {gotWord: false, found: false}
             if a word is found
