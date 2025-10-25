@@ -64,8 +64,6 @@ const game = {
 
             // Collect new words and crossed words
             const {newWords, crossedWords} = board.extractWords(placed, joins, orthogonal);
-            console.log("newWords:", newWords);
-            console.log("crossedWords:", crossedWords);
 
             // Check for existence of new words
             let invalidList = wordFuncs.validateWords(newWords);
