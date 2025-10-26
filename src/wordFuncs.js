@@ -3,6 +3,9 @@ const wordFuncs = {
     twoCharIndex: [],
     threeCharIndex: [],
     fourCharIndex: [],
+    comboFlagsTwo: [],
+    comboFlagsThree: [],
+    comboFlagsFour: [],
     aCode: 97,
 
     async loadWordList() {
@@ -19,6 +22,9 @@ const wordFuncs = {
         this.makeTwoCharIndex();
         this.makeThreeCharIndex();
         this.makeFourCharIndex();
+
+        // Create the letter combination flag lists
+        this.makeComboFlagLists();
 
     },
 
@@ -99,6 +105,37 @@ const wordFuncs = {
                 }
             }
             ++index;
+        }
+    },
+
+    makeComboFlagLists() {
+        // Set-up the array lists
+        this.comboFlagsTwo = new Array(26 ** 2).fill(false);
+        this.comboFlagsThree = new Array(26 ** 3).fill(false);
+        this.comboFlagsFour = new Array(26 ** 4).fill(false);
+
+        // Collect the combinations from the word list
+        for (let word of this.wordList) {
+            let p = 1;
+            // Loop through combinations starting from second char
+            while (p < word.length - 1) {
+                let comboTwo = word.substring(p, p + 2);
+                let code = this.getIndexCode(comboTwo, 2);
+                this.comboFlagsTwo[code] = true;
+
+                if (p < word.length - 2) {
+                    let comboThree = word.substring(p, p + 3);
+                    let code = this.getIndexCode(comboThree, 3);
+                    this.comboFlagsThree[code] = true;
+                }
+
+                if (p < word.length - 3) {
+                    let comboFour = word.substring(p, p + 4);
+                    let code = this.getIndexCode(comboFour, 4);
+                    this.comboFlagsFour[code] = true;
+                }
+                ++p;
+            }
         }
     },
 

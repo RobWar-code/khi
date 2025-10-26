@@ -13,6 +13,10 @@ Contents
         Test Setup
         First Word
         Nonfirst Words
+            Outline
+            Routines
+            Search Start Letter Combinations
+
     Board Test Setup
     Word List and Word Indexing
     Schedule
@@ -588,6 +592,68 @@ Contents
 
         return gotWin
     }
+
+<h3>Search Start Letter Combinations
+    layerData [
+        {
+            checkSet:,
+            checkSetPtr:,
+            charsUsed:,
+            scanWord:,
+            scanData:,
+            cellX,
+            cellY,
+        }
+    ]
+
+    The data for each added start letter is recorded in the
+    layerData array.
+
+    doStartLetters(orthogonal) {
+        Set-up the layerData and checkSet for the first letter
+        while not end of first letter selection
+            Add the first letter to the board
+            scan the word
+            Check whether the first letter placement makes a valid letter combination
+            if a valid combination
+                increment the layer
+                set the new layer data and checkSet
+                get the cellX, cellY positions from the scanData
+                let addStartObj = addStartLetters(layerData, layer + 1, orthogonal)
+
+            else
+                choose the next letter from the checkSet
+    }
+
+    addStartLetters(layerData, layer, orthogonal) {
+        while not end of checkSet
+            get the next checkSet letter
+            loop on star
+                addStartLetter(layerData, layer, orthogonal)
+    }
+
+    addStartLetter(layerData, layer, orthogonal) {
+        gotWin = false;
+        check the rightangle scan word 
+        if it does not exist 
+            return
+        
+        get the scan word
+        if it exists in the index or is found
+            if gotWord {
+                gotWin = score the word
+            }
+            if (!gotWin) {
+                set-up the level data for the addEndLetters function
+                // do the addEndLetters operation
+                gotWin = addEndLetters(levelData, level, layer, orthogonal)
+            }
+        }
+    }
+    
+
+    
+
 
 <h1>Board Test Setup
 

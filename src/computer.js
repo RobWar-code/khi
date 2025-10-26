@@ -270,8 +270,6 @@ const computer = {
             }
             let level = 0;
             endObj = this.addEndLetters(levelData, level, orthogonal);
-            // Debug
-            console.log("addLetters: Did addEndLetters:", this.hiScore, this.hiCombo, levelData);
             // Check for got win
             // Prepare to do start chars
             // Do right angle
@@ -290,7 +288,7 @@ const computer = {
                 checkSet.push({
                     letter: item,
                     star: false,
-                    currentSelection: -1,
+                    currentSelection: null,
                     selectionFlag: -1,
                 });
             }
@@ -301,7 +299,7 @@ const computer = {
                 checkSet.push({
                     letter: item,
                     star: true,
-                    currentSelection: -1,
+                    currentSelection: null,
                     selectionFlag: -1,
                 });
             };
@@ -369,6 +367,7 @@ const computer = {
                         levelData[level].scanWord = endLetterObj.scanWord,
                         levelData[level].scanData = endLetterObj.scanData
                         const {endOfLevels, beyondEdge} = this.getNextLevelCheckSet(levelData, level, orthogonal);
+                        checkSet[checkSetPtr].currentSelection = -1;
                         if (!endOfLevels && !beyondEdge) {
                             let endObj = this.addEndLetters(levelData, level + 1, orthogonal);
                             gotWin = endObj.gotWin;
@@ -378,6 +377,7 @@ const computer = {
                         }
                     }
                     else {
+                        if (!gotWin) checkSet[checkSetPtr].currentSelection = -1;
                         // get the next letter
                     }
                     ++starCount;
@@ -388,7 +388,6 @@ const computer = {
         // Debug
         let cellX = levelData[level].cellX;
         let cellY = levelData[level].cellY;
-        console.log("addEndLetters: end of checkSet - level, cellX, cellY", level, cellX, cellY);
         board.boardData[cellY][cellX] = {
             letter: "",
             playerNum: -1,
@@ -430,8 +429,6 @@ const computer = {
 
         // get the new scan word and scan data
         scanObj = board.scanWord(cellX, cellY, orthogonal);
-        // Debug
-        console.log("addEndLetter: - cellX, cellY, orthogonal, scanWord:", cellX, cellY, orthogonal, scanObj.word);
         found = false;
         let gotWord = false;
         let newScanWord = scanObj.word;
@@ -444,7 +441,6 @@ const computer = {
         foundObj = wordFuncs.indexFindWord(newScanWord);
         gotWord = foundObj.found;
         found = foundObj.gotStart || gotWord;
-        console.log("addEndLetter - word start found:", found);
         // if no match is found
         if (!found) {
             return {gotWord: false, found: false, gotWin: false};
@@ -489,10 +485,74 @@ const computer = {
         levelData[newLevel].cellY = endY;
         levelData[newLevel].letter = "";
         levelData[newLevel].charsUsed = "";
-        // Debug
-        console.log("getNextLevelCheckSet: level, endX, endY", newLevel, endX, endY);
         return {endOfLevels: false, beyondEdge: false};
     },
+
+    doStartLetters(cellX, cellY, orthogonal) {
+        // Count the number of letters in the rack
+        let count = 0;
+        for (let item of rack.racks[this.playerNum]) {
+            if (item != "") {
+                ++count;
+            }
+        }
+        // Set-up the layerData and checkSet for the first letter
+        let layerData = new Array(count);
+        let layer = 0;
+        let checkSet = this.makeCheckSet();
+        let checkSetPtr = 0;
+        let charsUsed = "";
+        let gotWin = false;
+        layerData[0] = {
+            checkSet: checkSet,
+            checkSetPtr: checkSetPtr,
+            charsUsed: "",
+        }
+
+        // while not end of first letter selection
+        let endOfCheckSet = false;
+        while (!endOfCheckSet) {
+            // Get the checkSet letter
+            let letter = "";
+            while (checkSetPtr < checkSet.length) {
+                if (checkSet[checkSetPtr].currentSelection === null) {
+                    letter = checkSet[checkSetPtr].letter;
+                    if (checkSet[checkSetPtr].star) letter = "*";
+                    if (charsUsed.indexOf(letter) < 0) {
+                        break;
+                    }
+                }
+                ++checkSetPtr;
+                if (checkSetPtr >= checkSet.length) endOfCheckSet = true;
+            }
+            if (!endOfCheckSet) {
+                // Add the first letter to the board
+                let starMax = 0;
+                if (letter === "*") starMax = this.alphabet.length - 1;
+                for (starCount = 0; starCount <= starMax; starCount++) {
+                    board.boardData[cellY][cellX] = {
+                        letter: letter,
+                        starTile: false,
+                        playerNum: this.playerNum,
+                        temp: false,
+                        lastCompLay: false                   
+                    }
+                    scan the word
+                    Check whether the first letter placement makes a valid letter combination
+                    if a valid combination
+                        increment the layer
+                        set the new layer data and checkSet
+                        get the cellX, cellY positions from the scanData
+                        let addStartObj = addStartLetters(layerData, layer + 1, orthogonal)
+
+                    else
+                        choose the next letter from the checkSet
+                } // End Star Loop
+            }
+        } // End Checkset Loop
+        return gotWin;
+    },
+
 
     scoreScanWord(levelData, level, word, scanData, orthogonal) {
         let newWords = [];
@@ -503,12 +563,11 @@ const computer = {
         // get the letter score from checkSet
         let checkSet = levelData[level].checkSet;
         let checkSetPtr = levelData[level].checkSetPtr;
-        console.log("scoreScanWord: checkSetPtr, checkSet", checkSetPtr, checkSet);
         let score = 0;
         let count = 0;
         for (let item of checkSet) {
             let letter = "";
-            if (count === checkSetPtr || item.currentSelection) {
+            if (count === checkSetPtr || item.currentSelection >= 0) {
                 letter = item.letter.toLowerCase();
                 if (item.star) {
                     letter = "*";
@@ -574,6 +633,7 @@ const computer = {
 
         // add the scanWord blue cell count to the score
         totalScore += scanData.blueCount;
+
         // save the left-most position of the scan word
         if (scanData.startX < leftMostPosition) leftMostPosition = scanData.startX;
         // if the left-most position is zero set the gotWin flag

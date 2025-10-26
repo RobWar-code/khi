@@ -4,10 +4,20 @@ Jobs Due
 
     Analyse use of test data for the board and the play 
     
+    Deal with gotWin in end letters etc.
+
+    Reduce the size of the board letters so that the background margins are larger
+
+    When the user's rack tile on the board is clicked, make it the current rack tile
+
+    Build the letter combination flag lists
+
     Do Computer Play Analysis
         * First Word
         Other Words
-            Select a valid position
+            * Select valid positions
+            * Loop through add end letter combinations
+            Loop through start of word combinations
 
     Do Computer Play First Word
         * Two chars
@@ -19,6 +29,15 @@ Jobs Due
         Lay the completed word
         Update the racks
         
+    Do Computer Play Nonfirst words
+        Set the layer to null initially
+        * Do add letters to end
+            Change checkSet currentSelection flag to use null instead of -1 to indicate not set.
+            When setting the checkSet currentSelection flag for a layer, use -(layer + 1)
+            Change the score function to look for currentSelection != null
+            Modify end of levels to take account of layer
+            Test a rack combination with *
+
     Allow for computer game finished after change tiles on first word
 
     Do player change tiles
