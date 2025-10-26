@@ -261,6 +261,26 @@ const wordFuncs = {
         return {found: found, isWord: isWord, offset: offset};
     },
 
+    /**
+     * Check the given combination against the combination lists
+     * returns found
+     * @param {} combo 
+     */
+    checkCombo(combo) {
+        let found = false;
+        let code = this.getIndexCode(combo, combo.length);
+        if (combo.length === 2) {
+            found = this.comboFlagsTwo[code];
+        }
+        else if (combo.length === 3) {
+            found = this.comboFlagsThree[code];
+        }
+        else if (combo.length === 4) {
+            found = this.comboFlagsFour[code];
+        }
+        return found;
+    },
+
     testSearch() {
         let words = [
             "on",

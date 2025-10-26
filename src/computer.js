@@ -507,11 +507,14 @@ const computer = {
             checkSet: checkSet,
             checkSetPtr: checkSetPtr,
             charsUsed: "",
-        }
+            cellX: cellX,
+            cellY: cellY
+        };
 
         // while not end of first letter selection
         let endOfCheckSet = false;
-        while (!endOfCheckSet) {
+        let pastBoardEdge = false;
+        while (!endOfCheckSet && !pastBoardEdge && !gotWin) {
             // Get the checkSet letter
             let letter = "";
             while (checkSetPtr < checkSet.length) {
@@ -526,6 +529,7 @@ const computer = {
                 if (checkSetPtr >= checkSet.length) endOfCheckSet = true;
             }
             if (!endOfCheckSet) {
+                charsUsed += letter;
                 // Add the first letter to the board
                 let starMax = 0;
                 if (letter === "*") starMax = this.alphabet.length - 1;
@@ -537,17 +541,61 @@ const computer = {
                         temp: false,
                         lastCompLay: false                   
                     }
-                    scan the word
-                    Check whether the first letter placement makes a valid letter combination
-                    if a valid combination
-                        increment the layer
-                        set the new layer data and checkSet
-                        get the cellX, cellY positions from the scanData
-                        let addStartObj = addStartLetters(layerData, layer + 1, orthogonal)
+                    // scan the word
+                    let scanObj = board.scanWord(cellX, cellY, orthogonal);
+                    let scanWord = scanObj.word;
+                    let scanData = {startX: scanObj.startX, endX: scanObj.endX, startY: scanObj.startY, endY: scanObj.endY,
+                        blueCount: scanObj.blueCount, blackCount: scanObj.blackCount}
+                    // get the next cellX, cellY positions from the scanData
+                    let newCellX = scanData.startX;
+                    let newCellY = scanData.startY;
+                    if (orthogonal === "horizontal") {
+                        --newCellX;
+                    }
+                    else {
+                        --newCellY;
+                    }
+                    if (newCellY < 0 || newCellX < 0) {
+                        pastBoardEdge = true;
+                        break;
+                    }
 
-                    else
-                        choose the next letter from the checkSet
+                    // Check whether the first letter placement makes a valid letter combination
+                    let combo = "";
+                    if (scanWord.length >= 4) {
+                        combo = scanWord.substring(0, 4);
+                    }
+                    else if (scanWord.length === 3) {
+                        combo = scanWord.substring(0, 3);
+                    }
+                    else {
+                        combo = scanWord.substring(0, 2);
+                    }
+                    let comboFound = wordFuncs.checkCombo(combo);
+                    // if a valid combination
+                    if (comboFound) {
+                        checkSet[checkSetPtr].currentSelection = -(layer + 1); 
+                        let newLayer = layer + 1;
+                        // set the new layer data and checkSet
+                        layerData[newLayer] = {
+                            checkSetPtr: -1,
+                            checkSet: JSON.parse(JSON.stringify(checkSet)),
+                            charsUsed: "",
+                            cellX: newCellX,
+                            cellY: newCellY,
+                            scanWord: scanWord,                
+                            scanData: scanData
+                        }
+                        let gotWin = this.addStartLetters(layerData, layer + 1, orthogonal);
+                        if (gotWin) {
+                            break;
+                        }
+                    }
+                    else {
+                        // Get the next star alpha character
+                    }
                 } // End Star Loop
+                // Get the next checkset char
             }
         } // End Checkset Loop
         return gotWin;
