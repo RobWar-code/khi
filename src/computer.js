@@ -50,7 +50,8 @@ const computer = {
         currentSelection: null, //or level/layer (if layer = -(layer + 1))
         selectionFlag/selectionNum: -1, // or level
         cellX: n, // Position on board
-        cellY: n
+        cellY: n,
+        rackPos: n, // The position in the rack of the character
     }
     */
 
@@ -231,14 +232,24 @@ const computer = {
             if (positionObj.ownTileFound) {
                 positionCellX = positionObj.cellX;
                 positionCellY = positionObj.cellY;
+                let orthogonal;
                 // For each vacant cell adjacent to own tile
                 for (let adjCell of positionObj.validCells) {
-                    let wordsObj = this.addLetters(levelData, positionCellX, positionCellY, adjCell.cellX, adjCell.cellY);
-                    console.log("did adjCell:", adjCell, wordsObj);
-                    if (wordsObj.gotWin) {
-                        gotWin = true;
-                        break;
+                    orthogonal = "horizontal";
+                    if (adjCell.cellY != positionCellY) orthogonal = "vertical";
+
+                    console.log("playTurn: before add letters - adjcell", adjCell);
+                    let wordsObj = this.addLetters(levelData, positionCellX, positionCellY, 
+                        adjCell.cellX, adjCell.cellY, orthogonal);
+                    console.log("playTurn: after addLetters to end, did adjCell:", adjCell, wordsObj);
+                    let gotWin = wordsObj.gotWin;
+
+                    if (!gotWin) {
+                        console.log("playTurn: before doStartLetters - adjCell:", adjCell);
+                        gotWin = this.doStartLetters(adjCell.cellX, adjCell.cellY, orthogonal);
+                        console.log("playTurn: after doStartLetters");
                     }
+                    if (gotWin) break;
                 }
                 // Debug
                 console.log("playTurn - completed adjCells", this.hiScore, this.hiCombo, rack.racks[this.playerNum]);
@@ -251,11 +262,8 @@ const computer = {
         }
     },
 
-    addLetters(levelData, ownCellX, ownCellY, adjCellX, adjCellY) {
+    addLetters(levelData, ownCellX, ownCellY, adjCellX, adjCellY, orthogonal) {
         let endObj = {gotWin: false};
-        // Determine orthogonal
-        let orthogonal = "vertical";
-        if (adjCellX != ownCellX) orthogonal = "horizontal";
         // Get scan word data
         let scanObj = board.scanWord(ownCellX, ownCellY, orthogonal);
         // Check that scan word does not end at edge of board
@@ -295,6 +303,7 @@ const computer = {
     makeCheckSet() {
         let checkSet = [];
         // Add letters from rack, excluding stars
+        let index = 0;
         for (let item of rack.racks[this.playerNum]) {
             if (item != "*" && item != "") {
                 checkSet.push({
@@ -303,11 +312,14 @@ const computer = {
                     currentSelection: null,
                     selectionFlag: -1,
                     cellX: -1,
-                    cellY: -1
+                    cellY: -1,
+                    rackPos: index
                 });
             }
+            ++index;
         }
         // Add in the stars
+        index = 0;
         for (let item of rack.racks[this.playerNum]) {
             if (item === "*") {
                 checkSet.push({
@@ -316,9 +328,11 @@ const computer = {
                     currentSelection: null,
                     selectionFlag: -1,
                     cellX: -1,
-                    cellY: -1
+                    cellY: -1,
+                    rackPos: index
                 });
             };
+            ++index;
         }
         return checkSet;
     },
@@ -368,6 +382,9 @@ const computer = {
                 // Record the board position of the check set letter
                 checkSet[checkSetPtr].cellX = levelData[level].cellX;
                 checkSet[checkSetPtr].cellY = levelData[level].cellY;
+                // Flag the letter
+                checkSet[checkSetPtr].currentSelection = level;
+                console.log("addEndLetters: letter, checkSet", letter, checkSetPtr, checkSet);
                 let starCount = 0;
                 let starMax = this.alphabet.length - 1;
                 if (letter != "*") starMax = 0;
@@ -380,16 +397,12 @@ const computer = {
                     let found = endLetterObj.found;
                     gotWin = endLetterObj.gotWin;
                     if (found && !gotWin) {
-                        // Flag the letter
-                        checkSet[checkSetPtr].currentSelection = level;
                         // Set the new level data
-                        levelData[level].checkSet = checkSet,
                         levelData[level].letter = letter,
                         levelData[level].charsUsed = charsUsed,
                         levelData[level].scanWord = endLetterObj.scanWord,
                         levelData[level].scanData = endLetterObj.scanData
                         const {endOfLevels, beyondEdge} = this.getNextLevelCheckSet(levelData, level, orthogonal);
-                        checkSet[checkSetPtr].currentSelection = -1;
                         if (!endOfLevels && !beyondEdge) {
                             let endObj = this.addEndLetters(levelData, level + 1, orthogonal);
                             gotWin = endObj.gotWin;
@@ -399,7 +412,6 @@ const computer = {
                         }
                     }
                     else {
-                        if (!gotWin) checkSet[checkSetPtr].currentSelection = -1;
                         // get the next letter
                     }
                     ++starCount;
@@ -470,6 +482,7 @@ const computer = {
         // if a word is found
         if (gotWord) {
             // score it, and if it is the highest, save it
+            console.log("addEndLetter - level checkSet", levelData[level].checkSet);
             gotWin = this.scoreScanWord(false, levelData, level, newScanWord, newScanData, orthogonal);
         }
         return {gotWin: gotWin, gotWord: gotWord, found: found, 
@@ -522,7 +535,7 @@ const computer = {
         let layerData = new Array(count);
         let layer = 0;
         let checkSet = this.makeCheckSet();
-        let checkSetPtr = 0;
+        let checkSetPtr = -1;
         let charsUsed = "";
         let gotWin = false;
         layerData[0] = {
@@ -539,8 +552,13 @@ const computer = {
         while (!endOfCheckSet && !pastBoardEdge && !gotWin) {
             // Get the checkSet letter
             let letter = "";
-            checkSet[checkSetPtr].currentSelection = null;
+            if (checkSetPtr >= 0) checkSet[checkSetPtr].currentSelection = null;
             while (checkSetPtr < checkSet.length) {
+                ++checkSetPtr;
+                if (checkSetPtr >= checkSet.length) {
+                    endOfCheckSet = true;
+                    break;
+                }
                 if (checkSet[checkSetPtr].currentSelection === null) {
                     letter = checkSet[checkSetPtr].letter;
                     if (checkSet[checkSetPtr].star) letter = "*";
@@ -548,8 +566,6 @@ const computer = {
                         break;
                     }
                 }
-                ++checkSetPtr;
-                if (checkSetPtr >= checkSet.length) endOfCheckSet = true;
             }
             if (!endOfCheckSet) {
                 charsUsed += letter;
@@ -626,7 +642,7 @@ const computer = {
                     }
                 } // End Star Loop
                 // Get the next checkset char
-            }
+            } // If not end of checkSet
         } // End Checkset Loop
         // Clear the letter from the board
         board.boardData[cellY][cellX] = {
@@ -649,26 +665,30 @@ const computer = {
         let gotWin = false;
         let endOfCheckSet = false;
         let boardEdge = false;
+        let charsUsed = "";
         while (!endOfCheckSet && !gotWin && !boardEdge) {
             // Get checkSet pointer
             let letter = "";
             if (checkSetPtr >= 0) checkSet[checkSetPtr].currentSelection = null;
-            ++checkSetPtr;
-            if (checkSetPtr >= checkSet.length) {
-                endOfCheckSet = true;
-            }
-            else {
-                if (checkSet[checkSetPtr].currentSelection === null) {
-                    letter = checkSet[checkSetPtr].letter;
-                    if (checkSet[checkSetPtr].star) letter = "*";
-                    if (charsUsed.indexOf(letter) < 0) {
-                        break;
+            while (!endOfCheckSet) {
+                ++checkSetPtr;
+                if (checkSetPtr >= checkSet.length) {
+                    endOfCheckSet = true;
+                }
+                else {
+                    if (checkSet[checkSetPtr].currentSelection === null) {
+                        letter = checkSet[checkSetPtr].letter;
+                        if (checkSet[checkSetPtr].star) letter = "*";
+                        if (charsUsed.indexOf(letter) < 0) {
+                            break;
+                        }
                     }
                 }
             }
             if (!endOfCheckSet) {
                 checkSet[checkSetPtr].cellX = cellX;
                 checkSet[checkSetPtr].cellY = cellY;
+                checkSet[checkSetPtr].currentSelection = -(layer + 1);
                 // get the checkSet letter
                 let starMax = 0;
                 if (letter === "*") starMax = this.alphabet.length;
@@ -685,7 +705,6 @@ const computer = {
                     let foundObj = this.addStartLetter(layerData, layer, orthogonal);
                     gotWin = foundObj.gotWin;
                     if (!gotWin && foundObj.comboFound) {
-                        checkSet[checkSetPtr].currentSelection = -(layer + 1);
                         // Add the next character at the start
                         // Create the layer object
                         let newLayer = layer + 1;
@@ -710,13 +729,21 @@ const computer = {
                                 }
                                 gotWin = this.addStartLetters(layerData, layer, orthogonal);
                             }
+                            else {
+                                boardEdge = true;
+                            }
+                        } // If layer greater than check set length
+                        else {
+                            // Skip the next additional letter
                         }
-
+                    } // If not combo found or gotwin
+                    else {
+                        // next letter
                     }
                     ++starCount;
-                }
-            }
-        }
+                } // Next Star Letter
+            } // If Not End of checkSet
+        } // While not end of checkset and not gotwin
         // Clear the cell
         board.boardData[cellY][cellX] = {
             letter: "",
@@ -773,7 +800,7 @@ const computer = {
         // if it exists in the index or is found
         if (found || gotWord) {
             if (gotWord) {
-                gotWin = this.scoreScanWord(true, layerData, layer, word, scanData, orthogonal);
+                gotWin = this.scoreScanWord(true, layerData, layer, scanWord, scanData, orthogonal);
             }
             if (!gotWin && layer < checkSet.length - 1) {
                 // set-up the level data for the addEndLetters function
@@ -795,6 +822,7 @@ const computer = {
                         letter: "",
                         charsUsed: ""
                     }
+                    let level = 0;
                     // do the addEndLetters operation
                     gotWin = this.addEndLetters(levelData, level, orthogonal)
                 }
@@ -849,7 +877,7 @@ const computer = {
         }
         totalScore += score;
 
-        console.log("scoreScanWord: word, letter score:", word, score);
+        console.log("scoreScanWord: isLayer, word, letter score, checkSet:", isLayer, word, score, checkSet);
 
         // get the scores for new words and crossed words
         let x = scanData.startX;
@@ -917,16 +945,10 @@ const computer = {
             // record the hi score details
             this.hiScore = totalScore;
             this.hiCheckSet = JSON.parse(JSON.stringify(checkSet));
-            if (!isLayer) {
-                this.hiCheckSet[checkSetPtr].currentSelection = level;
-            }
-            else {
-                this.hiCheckSet[checkSetPtr].currentSelection = -(level + 1);
-            }
             this.hiCombo = word;
             this.hiCellOrthogonal = orthogonal;
             this.hiCellX = cellX;
-            this.hiCellY = levelData.cellY;
+            this.hiCellY = cellY;
             this.hiNewWords = newWords;
             this.hiCrossWords = crossWords;
         }

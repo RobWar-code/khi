@@ -267,6 +267,7 @@ const wordFuncs = {
      * @param {} combo 
      */
     checkCombo(combo) {
+        combo = combo.toLowerCase();
         let found = false;
         let code = this.getIndexCode(combo, combo.length);
         if (combo.length === 2) {

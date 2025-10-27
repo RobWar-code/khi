@@ -43,8 +43,14 @@ Jobs Due
             * When setting the checkSet currentSelection flag for a layer, use -(layer + 1)
             * Change the score function to look for currentSelection != null
             * Modify end of levels to take account of layer
-            Retest the end letters procedures
+            * Retest the end letters procedures
             Test a rack combination with *
+        * Write the code for add letters to start
+            * Review the start letters code 
+            * Test the start letters code
+            need both level and layer data in the checkset for scores - origination of checkSet for addEndLetters
+
+        Do the rightangle word from the first letter        
 
     Allow for computer game finished after change tiles on first word
 
