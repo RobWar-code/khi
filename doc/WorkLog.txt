@@ -1,6 +1,7 @@
 Work Log
 
 Jobs Due
+    Possibly change board back-ground to light grey
 
     Analyse use of test data for the board and the play 
     
@@ -10,7 +11,13 @@ Jobs Due
 
     When the user's rack tile on the board is clicked, make it the current rack tile
 
-    Build the letter combination flag lists
+    Sort-out GitHub 2FA registration
+
+    Consider: At the game start allow the user to select board side and start first
+
+    * Build the letter combination flag lists
+
+    Document layer / level object in the code 
 
     Do Computer Play Analysis
         * First Word
@@ -32,10 +39,11 @@ Jobs Due
     Do Computer Play Nonfirst words
         Set the layer to null initially
         * Do add letters to end
-            Change checkSet currentSelection flag to use null instead of -1 to indicate not set.
-            When setting the checkSet currentSelection flag for a layer, use -(layer + 1)
-            Change the score function to look for currentSelection != null
-            Modify end of levels to take account of layer
+            * Change checkSet currentSelection flag to use null instead of -1 to indicate not set.
+            * When setting the checkSet currentSelection flag for a layer, use -(layer + 1)
+            * Change the score function to look for currentSelection != null
+            * Modify end of levels to take account of layer
+            Retest the end letters procedures
             Test a rack combination with *
 
     Allow for computer game finished after change tiles on first word

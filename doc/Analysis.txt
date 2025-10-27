@@ -652,9 +652,6 @@ Contents
     }
     
 
-    
-
-
 <h1>Board Test Setup
 
     The board test setup is provided to enable the testing of

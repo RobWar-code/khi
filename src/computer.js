@@ -3,7 +3,7 @@ const computer = {
     placed: [],
     vowelCount: 0,
     alphabet: "abcdefghijklmnopqrstuvwxyz",
-    acode: 97,
+    aCode: 97,
     letterScores: [
         {letter: "a", score: 1},
         {letter: "b", score: 2},
@@ -41,6 +41,18 @@ const computer = {
     hiCellOrthogonal: "", 
     hiNewWords: [],
     hiCrossWords: [],
+
+    /* 
+    checkSet Object
+    {
+        letter: "",
+        star: false,
+        currentSelection: null, //or level/layer (if layer = -(layer + 1))
+        selectionFlag/selectionNum: -1, // or level
+        cellX: n, // Position on board
+        cellY: n
+    }
+    */
 
     // Debug Vars
     foundCount: 0,
@@ -290,6 +302,8 @@ const computer = {
                     star: false,
                     currentSelection: null,
                     selectionFlag: -1,
+                    cellX: -1,
+                    cellY: -1
                 });
             }
         }
@@ -301,6 +315,8 @@ const computer = {
                     star: true,
                     currentSelection: null,
                     selectionFlag: -1,
+                    cellX: -1,
+                    cellY: -1
                 });
             };
         }
@@ -332,10 +348,11 @@ const computer = {
             // get next letter from checkSet
             let charFound = false;
             let letter = "";
+            if (checkSetPtr > -1) checkSet[checkSetPtr].currentSelection = null;
             while (!charFound && checkSetPtr < checkSet.length) {
                 ++checkSetPtr;
                 if (checkSetPtr < checkSet.length) {
-                    if (checkSet[checkSetPtr].currentSelection < 0) {
+                    if (checkSet[checkSetPtr].currentSelection === null) {
                         letter = checkSet[checkSetPtr].letter;
                         if (checkSet[checkSetPtr].star) letter = "*";
                         // Check whether the letter has been used before
@@ -348,6 +365,9 @@ const computer = {
             }
             levelData[level].checkSetPtr = checkSetPtr;
             if (charFound) {
+                // Record the board position of the check set letter
+                checkSet[checkSetPtr].cellX = levelData[level].cellX;
+                checkSet[checkSetPtr].cellY = levelData[level].cellY;
                 let starCount = 0;
                 let starMax = this.alphabet.length - 1;
                 if (letter != "*") starMax = 0;
@@ -459,7 +479,7 @@ const computer = {
 
     getNextLevelCheckSet(levelData, level, orthogonal) {
         let newLevel = level + 1;
-        if (newLevel >= rack.rackNumChars[this.playerNum]) {
+        if (newLevel >= levelData.length) {
             return {endOfLevels: true, beyondEdge: false};
         }
         // Get the new position from the scanWord data
@@ -519,6 +539,7 @@ const computer = {
         while (!endOfCheckSet && !pastBoardEdge && !gotWin) {
             // Get the checkSet letter
             let letter = "";
+            checkSet[checkSetPtr].currentSelection = null;
             while (checkSetPtr < checkSet.length) {
                 if (checkSet[checkSetPtr].currentSelection === null) {
                     letter = checkSet[checkSetPtr].letter;
@@ -532,6 +553,8 @@ const computer = {
             }
             if (!endOfCheckSet) {
                 charsUsed += letter;
+                checkSet[checkSetPtr].cellX = cellX;
+                checkSet[checkSetPtr].cellY = cellY;
                 // Add the first letter to the board
                 let starMax = 0;
                 if (letter === "*") starMax = this.alphabet.length - 1;
@@ -629,6 +652,7 @@ const computer = {
         while (!endOfCheckSet && !gotWin && !boardEdge) {
             // Get checkSet pointer
             let letter = "";
+            if (checkSetPtr >= 0) checkSet[checkSetPtr].currentSelection = null;
             ++checkSetPtr;
             if (checkSetPtr >= checkSet.length) {
                 endOfCheckSet = true;
@@ -643,6 +667,8 @@ const computer = {
                 }
             }
             if (!endOfCheckSet) {
+                checkSet[checkSetPtr].cellX = cellX;
+                checkSet[checkSetPtr].cellY = cellY;
                 // get the checkSet letter
                 let starMax = 0;
                 if (letter === "*") starMax = this.alphabet.length;
@@ -807,7 +833,7 @@ const computer = {
         let count = 0;
         for (let item of checkSet) {
             let letter = "";
-            if (count === checkSetPtr || item.currentSelection >= 0) {
+            if (count === checkSetPtr || item.currentSelection != null) {
                 letter = item.letter.toLowerCase();
                 if (item.star) {
                     letter = "*";
@@ -822,6 +848,8 @@ const computer = {
             ++count;
         }
         totalScore += score;
+
+        console.log("scoreScanWord: word, letter score:", word, score);
 
         // get the scores for new words and crossed words
         let x = scanData.startX;
