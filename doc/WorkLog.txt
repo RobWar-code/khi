@@ -1,6 +1,11 @@
 Work Log
 
 Jobs Due
+
+    Consider a computer thinking display
+
+    Clear the console logging from computer.js and board.js
+
     Possibly change board back-ground to light grey
 
     Analyse use of test data for the board and the play 
@@ -17,7 +22,9 @@ Jobs Due
 
     * Build the letter combination flag lists
 
-    Document layer / level object in the code 
+    Document layer / level object in the code
+
+    Consider working through all the positions to find the best gotWin scenario. 
 
     Do Computer Play Analysis
         * First Word
@@ -35,6 +42,7 @@ Jobs Due
         Integrate the computer turn and first word logic
         Lay the completed word
         Update the racks
+        Fix change tiles logic on first pass
         
     Do Computer Play Nonfirst words
         Set the layer to null initially
@@ -48,9 +56,8 @@ Jobs Due
         * Write the code for add letters to start
             * Review the start letters code 
             * Test the start letters code
-            need both level and layer data in the checkset for scores - origination of checkSet for addEndLetters
-
-        Do the rightangle word from the first letter        
+            * need both level and layer data in the checkset for scores - origination of checkSet for addEndLetters
+        * Do the rightangle words       
 
     Allow for computer game finished after change tiles on first word
 

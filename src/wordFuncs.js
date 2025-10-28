@@ -232,6 +232,7 @@ const wordFuncs = {
     },
 
     searchIndex(combo) {
+        combo = combo.toLowerCase();
         let keyLen = combo.length;
         let indexCode = this.getIndexCode(combo, keyLen);
         let offset = -1;

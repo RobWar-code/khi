@@ -21,7 +21,25 @@
 <script>
     // testVowelCount();
 
-    testComputerFirstWord();
+    // testComputerFirstWord();
+
+    wordListTests();
+
+    async function wordListTests() {
+        await wordFuncs.loadWordList();
+
+        let wordSet = [
+            "wa",
+            "aw"
+        ]
+
+        for (let word of wordSet) {
+            let foundObj = wordFuncs.indexFindWord(word);
+            let found = foundObj.found;
+            console.log("Word:", word, found);
+        }
+
+    }
 
     async function testComputerFirstWord() {
         await wordFuncs.loadWordList();

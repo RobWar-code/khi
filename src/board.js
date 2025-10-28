@@ -396,7 +396,8 @@ const board = {
     },
 
     setComputerWord() {
-        let placed = rack.lettersPlaced[1];
+        let placed = rack.lettersPlaced[computer.playerNum];
+        console.log("setComputerWord: placed", placed);
         for (let item of placed) {
             let cellX = item.cellX;
             let cellY = item.cellY;
@@ -411,7 +412,8 @@ const board = {
         }
         if (game.gameTurn > 0) {
             // Claim adjoining words
-            // Requires: newWords, crossedWords - see game.playWord
+            this.changeColours(computer.hiNewWords, computer.playerNum);
+            this.changeColours(computer.hiCrossWords, computer.playerNum);
         }
     },
 
