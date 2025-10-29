@@ -211,6 +211,7 @@ const wordFuncs = {
     },
 
     getWordList(combo, maxLen) {
+        combo = combo.toLowerCase();
         let wordSet = [];
         let foundObj = this.searchIndex(combo);
         if (foundObj.found) {

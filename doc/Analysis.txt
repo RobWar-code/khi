@@ -152,6 +152,7 @@ Contents
                 do the first word selection
                 If no word found
                     Change the letters
+                    Add a penalty of ten points
                     Increment the change letters count
                 Else
                     Set the word found flag

@@ -68,18 +68,19 @@ const tileSet = {
         }
     },
 
-    changeTiles(rackString) {
+    changeTiles(rack) {
+
         // Add the rack tiles to the hold
-        for (let c of rackString) {
+        for (let c of rack) {
             this.tileHold.push(c);
         }
         // Reshuffle the hold
         this.shuffleArray(this.tileHold);
         // Re-draw the letters
-        let newRack = "";
-        for (let i = 0; i < rack.rackLength; i++) {
+        let newRack = [];
+        for (let i = 0; i < rack.length; i++) {
             let c = this.tileHold.pop();
-            newRack += c;
+            newRack.push(c);
         }
         return newRack;
     }

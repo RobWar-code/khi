@@ -2,19 +2,25 @@ Work Log
 
 Jobs Due
 
-    Consider a computer thinking display
-
     Clear the console logging from computer.js and board.js
+
+    Test change letters when not enough tiles left
+
+    Introduce score penalty for change tiles
+
+    Remove the playTurn rack test set-up
 
     Possibly change board back-ground to light grey
 
     Analyse use of test data for the board and the play 
     
-    Deal with gotWin in end letters etc.
+    * Deal with gotWin in end letters etc.
 
     Reduce the size of the board letters so that the background margins are larger
 
     When the user's rack tile on the board is clicked, make it the current rack tile
+
+    Consider a computer thinking display
 
     Sort-out GitHub 2FA registration
 
@@ -40,9 +46,10 @@ Jobs Due
         * Greater than four chars (wordList parsing)
             * Test
         Integrate the computer turn and first word logic
-        Lay the completed word
+        * Lay the completed word
         Update the racks
         Fix change tiles logic on first pass
+        Check whether words longer than 4 chars chosen
         
     Do Computer Play Nonfirst words
         Set the layer to null initially
@@ -57,7 +64,14 @@ Jobs Due
             * Review the start letters code 
             * Test the start letters code
             * need both level and layer data in the checkset for scores - origination of checkSet for addEndLetters
-        * Do the rightangle words       
+        * Do the rightangle words
+            Check the first rightAngle combination to the rightAngle       
+
+    * Check all computer rack letters replaced
+
+    At the end of each turn set and display the player scores
+
+    At the start of each game re-initialise the game variables and score display
 
     Allow for computer game finished after change tiles on first word
 

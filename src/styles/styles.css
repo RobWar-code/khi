@@ -137,6 +137,12 @@ body {
     background-color: bisque;
 }
 
+/* Score Panel */
+#scoresDiv {
+    display: none;
+    text-align: center;
+}
+
 /* Star Letter Selector */
 #starLetterDiv {
     display: none;
@@ -167,6 +173,7 @@ body {
     font-style: italic;
     color: #700000;
 }
+
 
 @media screen and (max-width: 800px) {
     #introDiv p {

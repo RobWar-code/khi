@@ -208,6 +208,10 @@ const board = {
                 if (positionCellX >= this.boardWidth) gotEdge = true;
             }
             if (!gotEdge) {
+                // Debug
+                if (positionCellY === 9 && positionCellX === 14) {
+                    console.log("boardData:", this.boardData[positionCellY][positionCellX]);
+                }
                 // If own tile
                 if (this.boardData[positionCellY][positionCellX].playerNum === playerNum) {
                     // Check the adjacent squares
@@ -404,7 +408,7 @@ const board = {
             this.boardData[cellY][cellX] = {
                 letter: item.letter.toUpperCase(),
                 starTile: false,
-                playerNum: 1,
+                playerNum: computer.playerNum,
                 temp: false,
                 lastCompLay: true
             };
@@ -481,5 +485,19 @@ const board = {
         }
         return {word: word, startX: startX, endX: endX, startY: startY, endY: endY, 
             blueCount: blueCount, blackCount: blackCount};
+    },
+
+    getTileScores() {
+        let scores = [0, 0];
+        for (let y = 0; y < this.boardHeight; y++) {
+            for (let x = 0; x < this.boardWidth; x++) {
+                let item = this.boardData[y][x];
+                if (item.letter != "") {
+                    let playerNum = item.playerNum;
+                    ++scores[playerNum];
+                }
+            }
+        }
+        return scores; 
     }
 }

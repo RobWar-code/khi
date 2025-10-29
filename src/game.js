@@ -4,6 +4,9 @@ const game = {
     passCount: 0,
 
     playWord(player) {
+        let gotWin = false;
+        let endOfGame = false;
+
         // If this is first turn, ensure that a tile is on the start square
         if (this.gameTurn === 0) {
             let found = rack.checkForTileOnStartSquare();
@@ -109,10 +112,19 @@ const game = {
         board.clearTemp(placed);
 
         // Refill the rack
-        let endOfGame = rack.replenish(0);
+        endOfGame = rack.replenish(0);
 
         // Computer Play
-        computer.play();
+        if (!endOfGame) {
+            // Allow for too many changes or passes
+            let endObj = computer.play();
+            gotWin = endObj.gotWin;
+        }
+
+        if (!gotWin && !endOfGame) {
+            // Display the current scores
+            this.displayCurrentScores();
+        }
 
         ++this.gameTurn;
     },
@@ -163,6 +175,18 @@ const game = {
         setTimeout(() => {
             statusDiv.style.display = "none";
         }, 8000);
+    },
+
+    displayCurrentScores() {
+        let scoreSet = board.getTileScores();
+        // Deduct Penalties
+        for (let i = 0; i < 2; i++) {
+            scoreSet[i] -= game.penalties[i];
+        }
+        // Display
+        document.getElementById("scoresDiv").style.display = "block";
+        document.getElementById("playerScore").innerText = scoreSet[0];
+        document.getElementById("computerScore").innerText = scoreSet[1];
     }
 
 }

@@ -210,5 +210,6 @@ const rack = {
         game.penalties[playerNum] += 10;
 
         // If playerNum === 0; re-display the rack
+        return true;
     }
 }
