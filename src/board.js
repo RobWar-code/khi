@@ -131,11 +131,21 @@ const board = {
 
     },
 
-    clearTemp(placed) {
+    clearTemp() {
+        // Clear player tile highlights
+        let placed = rack.lettersPlaced[0];
         for (let item of placed) {
             let cellX = item.cellX;
             let cellY = item.cellY;
             this.boardData[cellY][cellX].temp = false;
+            this.displayTile(cellX, cellY);
+        }
+        // Clear computer tile highlights
+        placed = rack.lettersPlaced[1];
+        for (let item of placed) {
+            let cellX = item.cellX;
+            let cellY = item.cellY;
+            this.boardData[cellY][cellX].lastCompLay = false;
             this.displayTile(cellX, cellY);
         }
     },
@@ -145,7 +155,6 @@ const board = {
             let startX = wordItem.startX;
             let endX = wordItem.endX;
             let startY = wordItem.startY;
-            let endY = wordItem.endY;
             let dy = 0;
             let dx = 0;
             if (startX === endX) dy = 1;
@@ -154,7 +163,6 @@ const board = {
             let cellY = startY;
             let word = wordItem.word;
             for (let i = 0; i < word.length; i++) {
-                let c = word[i];
                 this.boardData[cellY][cellX].playerNum = playerNum;
                 this.displayTile(cellX, cellY);
                 cellX += dx;

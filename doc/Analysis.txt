@@ -2,6 +2,8 @@ Khi - a combative crossword game
 
 Contents
     Introduction and Game Play
+        Tile Capture
+        Win Game Procedures
     Technology
     Screen Layout
     Logic Flow
@@ -40,13 +42,26 @@ Contents
     marked with a star to represent the starting points for each player.
     The computer begins on the right, the player on the left.
 
+    If a player cannot form a word he can pass. He may also change all
+    of his letters for a penalty of 10 points.
+
+<h2>Tile Capture
     A player must join new words to a letter of his own colour on the 
     board. When a player's new word crosses or forms a new word with tile(s)
     of the opponent's colours, the colours of the words formed or crossed
     are changed to that of the player.
 
-    If a player cannot form a word he can pass. He may also change all
-    of his letters for a penalty of 10 points.
+    Crossed words only count in the direction of the letters layed, the first
+    such direction if only a single tile is layed.
+
+<h2>Win Game Procedures
+    When the gotWin flag is detected, the player is recorded and the game
+    end panel is displayed. 
+
+    The game end panel displays a table with the tile score, penalties,
+    bonus and total scores.
+
+    A message with "Computer Wins" or "You Win" is also displayed.
 
 <h1>Technology
     HTML, CSS, Javascript, npm word-list

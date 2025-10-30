@@ -7,6 +7,11 @@ const rack = {
     starCellX: -1,  // Holding for star cell letter selection
     starCellY: -1,
     lettersPlaced: [[],[]], // {rackCell, cellX, cellY, letter}
+    // Debug
+    playerTestRacks: [
+        ["H","E","A","T","E","R","S"],
+        ["E","A","S","Y","W","Z","Q"]
+    ],
 
     fillRacks() {
         this.racks = [];
@@ -19,6 +24,8 @@ const rack = {
             this.racks.push(rack);
             this.rackNumChars[i] = this.rackLength;
         }
+        // Debug
+        this.racks[0] = this.playerTestRacks[0];
     },
 
     displayTiles() {
@@ -183,12 +190,17 @@ const rack = {
             endOfGame === true;
         }
 
+        // Debug
+        if (game.gameTurn === 0 && playerNum === 0) {
+            this.racks[0] = this.playerTestRacks[1];
+        }
+
         if (playerNum === 0) {
             this.displayTiles();
         }
 
         // Cleared placed items list
-        this.lettersPlaced[playerNum] = [];
+        if (playerNum === 0) this.lettersPlaced[playerNum] = [];
         this.currentRackTile = -1;
 
         return endOfGame;

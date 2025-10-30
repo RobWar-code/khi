@@ -1,7 +1,10 @@
 const game = {
+    userNum: 0,
+    winBonus: 10,
     gameTurn: 0,
     penalties: [0, 0],
     passCount: 0,
+    winner: -1,
 
     playWord(player) {
         let gotWin = false;
@@ -54,6 +57,7 @@ const game = {
         if (this.gameTurn > 0) {
             // Check that word is joined to own colour
             const {joins, ownJoin} = board.checkWordJoins(placed, player);
+            console.log("playWord: joins, ownJoin", joins, ownJoin);
             if (joins.length === 0) {
                 let message = "Your word must join another word on the board";
                 this.statusReport(message);
@@ -67,6 +71,8 @@ const game = {
 
             // Collect new words and crossed words
             const {newWords, crossedWords} = board.extractWords(placed, joins, orthogonal);
+            console.log("playWord: - newWords", newWords);
+            console.log("playWord: - crossedWords", crossedWords);
 
             // Check for existence of new words
             let invalidList = wordFuncs.validateWords(newWords);
@@ -87,8 +93,9 @@ const game = {
             board.changeColours(crossedWords, player);
 
             // Check for winning tile
-            // let gameWon = board.gameWon(newWords, player);
-            // if (!gameWon) gameWon = board.gameWon(crossedWords, player);
+            gotWin = this.gameWon(newWords);
+            if (!gotWin) gotWin = this.gameWon(crossedWords);
+            if (gotWin) winner = this.userNum;
 
         }
         else {
@@ -109,13 +116,13 @@ const game = {
         
 
         // Clear the temp flags from the board letters
-        board.clearTemp(placed);
+        board.clearTemp();
 
         // Refill the rack
-        endOfGame = rack.replenish(0);
+        endOfGame = rack.replenish(this.userNum);
 
         // Computer Play
-        if (!endOfGame) {
+        if (!endOfGame && !gotWin) {
             // Allow for too many changes or passes
             let endObj = computer.play();
             gotWin = endObj.gotWin;
@@ -125,13 +132,16 @@ const game = {
             // Display the current scores
             this.displayCurrentScores();
         }
+        else {
+            // Display the end of game panel etc.
+            this.doEndOfGame();
+        }
 
         ++this.gameTurn;
     },
 
     sortPlacedTiles(placed) {
         let errorObj = {error: true};
-        let orthogonal = "";
         if (placed.length > 1) {
             // Determine whether vertical or horizontal
             if (placed[0].cellX === placed[1].cellX) {
@@ -165,6 +175,16 @@ const game = {
                 return errorObj;
             }
         }
+        else {
+            // Single tile, get the orthogonal from the first join
+            let cellX = placed[0].cellX;
+            let cellY = placed[0].cellY;
+            orthogonal = "horizontal";
+            let scanObj = board.scanWord(cellX, cellY, orthogonal);
+            if (scanObj.word.length === 1) {
+                orthogonal === "vertical";
+            }
+        }
         return {error: false, orthogonal: orthogonal};
     },
 
@@ -187,6 +207,54 @@ const game = {
         document.getElementById("scoresDiv").style.display = "block";
         document.getElementById("playerScore").innerText = scoreSet[0];
         document.getElementById("computerScore").innerText = scoreSet[1];
+    },
+
+    gameWon(wordSet) {
+        // Check through the word set for edge tile
+        let found = false;
+        for (let item of wordSet) {
+            if (wordSet.endX === board.boardWidth - 1) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    },
+
+    doEndOfGame() {
+        document.getElementById("gameEndDiv").style.display = "block";
+        document.getElementById("playOptionsDiv").style.display = "none";
+        document.getElementById("scoresDiv").style.display = "none";
+
+        let totalScores = [0, 0];
+        // Get the tile scores
+        let tileScores = board.getTileScores();
+        document.getElementById("tileScore0").innerText = tileScores[0];
+        document.getElementById("tileScore1").innerText = tileScores[1];
+        totalScores[0] += tileScores[0];
+        totalScores[1] += tileScores[1];
+
+        // Penalties
+        document.getElementById("penalty0").innerText = -this.penalties[0];
+        document.getElementById("penalty1").innerText = -this.penalties[1];
+        totalScores[0] -= this.penalties[0];
+        totalScores[1] -= this.penalties[1];
+
+        // Bonus
+        let bonus = [0,0]
+        if (this.winner >= 0) {
+            bonus[this.winner] = this.winBonus;
+        }
+        document.getElementById("bonus0").innerText = bonus[0];
+        document.getElementById("bonus1").innerText = bonus[1];
+        totalScores[0] += bonus[0];
+        totalScores[1] += bonus[1];
+
+        // Totals
+        document.getElementById("totalScore0").innerText = totalScores[0];
+        document.getElementById("totalScore0").innerText = totalScores[0];
+
+        // Do Message
     }
 
 }

@@ -2,9 +2,24 @@ Work Log
 
 Jobs Due
 
+    Check existence of ST, ET, VLYS
+        Check the rightAngle word in addEndLetter
+
+    Do the gotWin scenario
+    
+    Check player change colours against computer word
+
+    Change colours for computer should only mark-out crossed words in the word direction
+
     Clear the console logging from computer.js and board.js
 
+    Clear the last move highlighting from the computer tiles
+
+    Do not select empty rack positions
+
     Test change letters when not enough tiles left
+
+    Where the computer hiScore is equal, consider random selection
 
     Introduce score penalty for change tiles
 
@@ -65,7 +80,7 @@ Jobs Due
             * Test the start letters code
             * need both level and layer data in the checkset for scores - origination of checkSet for addEndLetters
         * Do the rightangle words
-            Check the first rightAngle combination to the rightAngle       
+            * Check the first rightAngle combination to the rightAngle       
 
     * Check all computer rack letters replaced
 

@@ -1,4 +1,5 @@
 const computer = {
+    maxTestPositions: 8,
     playerNum: 1,
     placed: [],
     vowelCount: 0,
@@ -61,6 +62,7 @@ const computer = {
 
     play() {
         this.hiScore = 0;
+        rack.lettersPlaced[this.playerNum] = [];
         let changeCount = 0;
         let lettersFinished = false;
         let gameComplete = false;
@@ -68,14 +70,15 @@ const computer = {
         let gotWord = false;
         let gotWin = false;
         // Debug
-        let testRacks = [
+        /* let testRacks = [
             ["A","D","V","I","T","W","H"],
             ["R","D","I","W","X","Y","H"]
         ]
+        */
         while (!gotWord && !pass && changeCount < 3 && !lettersFinished) {
             let statusObj = {lettersFinished: false, changeLetters: false, pass: false, gameComplete: false};
             // Debug 
-            rack.racks[this.playerNum] = testRacks[game.gameTurn];
+            // rack.racks[this.playerNum] = testRacks[game.gameTurn];
             if (game.gameTurn === 0) {
                 statusObj = this.playFirst();
             }
@@ -247,7 +250,7 @@ const computer = {
         let positionCellX = 0;
         let positionCellY = -1;
         let endOfPositions = false;
-        while (positionCount < 1 && !endOfPositions && !gotWin) {
+        while (positionCount < this.maxTestPositions && !endOfPositions && !gotWin) {
             // Get the next position
             let positionObj = board.findNextOwnCell(this.playerNum, positionCellX, positionCellY);
             console.log("positionObj:",positionObj);
@@ -266,10 +269,6 @@ const computer = {
                             orthogonal = orthogonal === "horizontal" ? "vertical" : "horizontal";
                         }
 
-                        // Debug
-                        if (adjCell.cellY === 9 && adjCell.cellX === 15) {
-                            console.log("invalid adjacent cell before addLetters", orthogonal);
-                        }
                         let gotWin = this.addLetters(levelData, positionCellX, positionCellY, 
                             adjCell.cellX, adjCell.cellY, orthogonal);
 
@@ -286,8 +285,9 @@ const computer = {
                 endOfPositions = true;
             }
         }
-        console.log("playTurn: end of loop, second letter:", board.boardData[9][15]);
         console.log("Completed positions: hiScore, hiCombo - ", this.hiScore, this.hiCombo);
+        console.log("hiNewWords", this.hiNewWords);
+        console.log("hiCrossWords", this.hiCrossWords);
         return gotWin;
     },
 
@@ -451,10 +451,6 @@ const computer = {
         // Debug
         let cellX = levelData[level].cellX;
         let cellY = levelData[level].cellY;
-        // Debug
-        if (cellX === 15 && cellY === 9) {
-            console.log("addEndLetters - removed invalid tile", orthogonal, level);
-        }
         board.boardData[cellY][cellX] = {
             letter: "",
             playerNum: -1,
@@ -697,10 +693,6 @@ const computer = {
             } // If not end of checkSet
         } // End Checkset Loop
         // Clear the letter from the board
-        // Debug
-        if (cellY === 9 && cellX === 15) {
-            console.log("doStartLetters: invalid tile cleared");
-        }
         board.boardData[cellY][cellX] = {
             letter: "",
             starTile: false,
@@ -802,10 +794,6 @@ const computer = {
             } // If Not End of checkSet
         } // While not end of checkset and not gotwin
         // Clear the cell
-        // Debug
-        if (cellY === 9 && cellX === 15) {
-            console.log("addStartLetters: clearing invalid cell");
-        }
         board.boardData[cellY][cellX] = {
             letter: "",
             starTile: false,
@@ -950,7 +938,7 @@ const computer = {
             if (orthogonal === "horizontal") rightAngle = "vertical";
             // scan the right-angle word
             let scanObj = board.scanWord(x, y, rightAngle);
-            // if > 1 letter
+            // if > 1 letter -New Word
             if (scanObj.word.length > 1) {
                 // if the cell letter is black
                 if (board.boardData[y][x].playerNum === this.playerNum) {
@@ -963,7 +951,9 @@ const computer = {
                         endY: scanObj.endY
                     });
                 }
-                else {
+
+                // Crossed Words
+                else if (board.boardData[y][x].playerNum === 0) {
                     // add the right-angle word to the cross words
                     crossWords.push({
                         word: scanObj.word,
@@ -973,7 +963,6 @@ const computer = {
                         endY: scanObj.endY
                     });
                 }
-
                 // add the blue cell count for the right-angle word to the score
                 totalScore += scanObj.blueCount;
                 // save the left-most position of the right-angle word
@@ -1302,7 +1291,6 @@ const computer = {
 
     firstWordSetLettersPlaced() {
         let len = this.hiCombo.length;
-        console.log("hiCombo:", this.hiCombo);
         let cellY = board.starCellY0;
         let cellX = board.starCellX1 - len + 1;
         let placed = [];
