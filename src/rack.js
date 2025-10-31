@@ -25,7 +25,7 @@ const rack = {
             this.rackNumChars[i] = this.rackLength;
         }
         // Debug
-        this.racks[0] = this.playerTestRacks[0];
+        // this.racks[0] = this.playerTestRacks[0];
     },
 
     displayTiles() {
@@ -41,11 +41,27 @@ const rack = {
         let rackCell = document.getElementById(`rackCell${rackTileNum}`);
         rackCell.innerHTML = "";
         rackCell.innerHTML = `<div class="rackLetterDiv">${letter}</div>`;
+        if (rackTileNum === this.currentRackTile) {
+            this.setRackCellHighlight(rackTileNum);
+        }
+        else {
+            this.clearRackCellHighlight(rackTileNum);
+        }
     },
 
     tileClick (event) {
         let tileId = event.currentTarget.id;
         let tileNum = parseInt(tileId.substring(tileId.length - 1));
+        // Check whether this tile has been played
+        let found = false;
+        for (let item of this.lettersPlaced[game.userNum]) {
+            if (item.rackCell === tileNum) {
+                found = true;
+                break;
+            }
+        }
+        if (found || this.racks[game.userNum][tileNum] === "") return;
+
         if (this.currentRackTile > -1) {
             // Clear the highlight from the current tile
             this.clearRackCellHighlight(this.currentRackTile);
@@ -150,6 +166,8 @@ const rack = {
         this.lettersPlaced[0] = temp;
 
         // Add the letter back to the rack
+        if (this.currentRackTile >= 0) this.clearRackCellHighlight(this.currentRackTile);
+        this.currentRackTile = rackCell;
         this.displayTile(rackCell);
 
     },
@@ -191,9 +209,11 @@ const rack = {
         }
 
         // Debug
+        /*
         if (game.gameTurn === 0 && playerNum === 0) {
             this.racks[0] = this.playerTestRacks[1];
         }
+        */
 
         if (playerNum === 0) {
             this.displayTiles();
@@ -208,20 +228,34 @@ const rack = {
 
     changeTiles(playerNum) {
         // Check that there are enough tiles in the hold
-        if (tileSet.tileHold.length < 1) {
+        if (tileSet.tileHold.length <= 1) {
             let message = "The tile hold is empty so you cannot change tiles - try Pass";
             game.statusReport(message);
             return false;
         }
 
         // if playerNum === 0; clear any played tiles from the board
+        if (playerNum === game.userNum) {
+            board.returnPlayerTiles();
+        }
 
+        // Change the tiles
         let rack = this.racks[playerNum];
         let newRack = tileSet.changeTiles(rack);
         this.racks[playerNum] = newRack;
+
+        // Add the penalty
         game.penalties[playerNum] += 10;
 
         // If playerNum === 0; re-display the rack
+        if (playerNum === game.userNum) {
+            this.currentRackTile = -1;
+            this.displayTiles();
+            // Redisplay the scores
+            if (game.gameTurn > 0) {
+                game.displayCurrentScores();
+            }
+        }
         return true;
     }
 }

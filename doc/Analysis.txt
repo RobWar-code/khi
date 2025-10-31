@@ -4,6 +4,7 @@ Contents
     Introduction and Game Play
         Tile Capture
         Win Game Procedures
+    User Options
     Technology
     Screen Layout
     Logic Flow
@@ -62,6 +63,42 @@ Contents
     bonus and total scores.
 
     A message with "Computer Wins" or "You Win" is also displayed.
+
+<h1>User Options
+    The user options on the screen are:
+        Pass
+        Play Word
+        Change Tiles
+        Restart Game
+
+    Pass Option
+        If the game turn is zero, message the user and return
+        
+        When the pass option is clicked, any temporary tiles on the board are
+        returned to the rack.
+
+        If the passCount is greater than zero (that is the computer has passed),
+        then the end of game procedure is called.
+
+        Otherwise, the passCount is set to 1 and the main game.playWord() is called,
+        this checks for the passCount and skips straight to the computer turn.
+
+        If the computer does not pass, the passCount is reset to 0 after it's turn.
+
+    Change Tiles Option
+        If the rack has 1 or less tiles left, suggest a pass.
+
+        Otherwise, clear any rack tiles on the board.
+
+        Add the rack tiles to the tile hold and reshuffle.
+
+        Select upto 7 new rack tiles (depending on the number in the hold).
+
+        Redisplay the rack
+
+        Add 10 points to the user's penalties
+
+        Continue the turn
 
 <h1>Technology
     HTML, CSS, Javascript, npm word-list
@@ -732,7 +769,10 @@ Start Date: 08/10/2025
                                     Est              Actual
 Board and Rack Layout               2 days           2 days
 Board Play                          1 day            1 day
-Player Tiles Played Validation      3 days      
-Word list and indexing              3 days
-Computer turns                      14 days
+Player Tiles Played Validation      3 days           3 days
+Word list and indexing              3 days           3 days
+Computer turns                      14 days          16 days
+User Options                        6 days
 Trials and Adjustments              10 days
+Systems Test Design                 3 days
+Systems Test Implement              3 days

@@ -507,5 +507,20 @@ const board = {
             }
         }
         return scores; 
+    },
+
+    /**
+     * Return all temporary player tiles to the rack
+     */
+    returnPlayerTiles() {
+        for (let cellY = 0; cellY < this.boardHeight; cellY++) {
+            for (let cellX = 0; cellX < this.boardWidth; cellX++) {
+                let cell = this.boardData[cellY][cellX];
+                if (cell.temp) {
+                    rack.returnTile(cell);
+                    this.clearCell(cellX, cellY);
+                }
+            }
+        }
     }
 }

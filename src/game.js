@@ -4,128 +4,153 @@ const game = {
     gameTurn: 0,
     penalties: [0, 0],
     passCount: 0,
+    playerPassed: false,
     winner: -1,
 
     playWord(player) {
         let gotWin = false;
         let endOfGame = false;
 
-        // If this is first turn, ensure that a tile is on the start square
-        if (this.gameTurn === 0) {
-            let found = rack.checkForTileOnStartSquare();
-            if (!found) {
-                let message = "On the first turn a tile must be placed on the left star square";
-                this.statusReport(message);
-                return;
-            }
-        }
-
-        let orthogonal = "";
-        let placed = rack.lettersPlaced[player];
-        if (this.gameTurn === 0 && placed.length === 1) {
-            let message = "You must make at least a two-letter word";
-            this.statusReport(message);
-            return;
-        }
-        else if (this.gameTurn > 0 && placed.length === 1) {
-            // Find the join direction
-            let cellX = placed[0].cellX;
-            let cellY = placed[0].cellY;
-            let joins = board.getJoins(cellX, cellY);
-            if (joins.length === 0) {
-                let message = "Letter is not joined to other words";
-                this.statusReport(message);
-                return;
-            }
-            let adjCell = joins[0].adjCell;
-            orthogonal = adjCell[0] === 0 ? "vertical" : "horizontal";
-        }
-        else if (placed.length > 1) {
-            // Sort the orthogonal of the letters placed or report error
-            let placedObj = this.sortPlacedTiles(placed);
-            if (placedObj.error) return;
-            orthogonal = placedObj.orthogonal;
-            
-            // Check for gaps of the orthogonal
-            let error = board.checkOrthogonalGaps(placed, orthogonal);
-            if (error != "") {
-                this.statusReport(error);
-                return;
-            }
-        }
-
-        if (this.gameTurn > 0) {
-            // Check that word is joined to own colour
-            const {joins, ownJoin} = board.checkWordJoins(placed, player);
-            console.log("playWord: joins, ownJoin", joins, ownJoin);
-            if (joins.length === 0) {
-                let message = "Your word must join another word on the board";
-                this.statusReport(message);
-                return;
-            }
-
-            if (!ownJoin) {
-                let message = "Your word must join at least one tile of your own";
-                this.statusReport(message);
-            }
-
-            // Collect new words and crossed words
-            const {newWords, crossedWords} = board.extractWords(placed, joins, orthogonal);
-            console.log("playWord: - newWords", newWords);
-            console.log("playWord: - crossedWords", crossedWords);
-
-            // Check for existence of new words
-            let invalidList = wordFuncs.validateWords(newWords);
-            if (invalidList.length > 0) {
-                let message = "The following words are invalid: ";
-                let start = true;
-                for (let word of invalidList) {
-                    if (!start) message += ", ";
-                    message += word;
-                    start = false;
+        if (!this.playerPassed) {
+            this.passCount = 0;
+            // If this is first turn, ensure that a tile is on the start square
+            if (this.gameTurn === 0) {
+                let found = rack.checkForTileOnStartSquare();
+                if (!found) {
+                    let message = "On the first turn a tile must be placed on the left star square";
+                    this.statusReport(message);
+                    return;
                 }
+            }
+
+            let orthogonal = "";
+            let placed = rack.lettersPlaced[player];
+            if (this.gameTurn === 0 && placed.length === 1) {
+                let message = "You must make at least a two-letter word";
                 this.statusReport(message);
                 return;
             }
+            else if (this.gameTurn > 0 && placed.length === 1) {
+                // Find the join direction
+                let cellX = placed[0].cellX;
+                let cellY = placed[0].cellY;
+                let joins = board.getJoins(cellX, cellY);
+                if (joins.length === 0) {
+                    let message = "Letter is not joined to other words";
+                    this.statusReport(message);
+                    return;
+                }
+                let adjCell = joins[0].adjCell;
+                orthogonal = adjCell[0] === 0 ? "vertical" : "horizontal";
+            }
+            else if (placed.length > 1) {
+                // Sort the orthogonal of the letters placed or report error
+                let placedObj = this.sortPlacedTiles(placed);
+                if (placedObj.error) return;
+                orthogonal = placedObj.orthogonal;
+                
+                // Check for gaps of the orthogonal
+                let error = board.checkOrthogonalGaps(placed, orthogonal);
+                if (error != "") {
+                    this.statusReport(error);
+                    return;
+                }
+            }
 
-            // Change the colour and player settings to the player
-            board.changeColours(newWords, player);
-            board.changeColours(crossedWords, player);
+            if (this.gameTurn > 0) {
+                // Check that word is joined to own colour
+                const {joins, ownJoin} = board.checkWordJoins(placed, player);
+                console.log("playWord: joins, ownJoin", joins, ownJoin);
+                if (joins.length === 0) {
+                    let message = "Your word must join another word on the board";
+                    this.statusReport(message);
+                    return;
+                }
 
-            // Check for winning tile
-            gotWin = this.gameWon(newWords);
-            if (!gotWin) gotWin = this.gameWon(crossedWords);
-            if (gotWin) winner = this.userNum;
+                if (!ownJoin) {
+                    let message = "Your word must join at least one tile of your own";
+                    this.statusReport(message);
+                }
 
-        }
+                // Collect new words and crossed words
+                const {newWords, crossedWords} = board.extractWords(placed, joins, orthogonal);
+                console.log("playWord: - newWords", newWords);
+                console.log("playWord: - crossedWords", crossedWords);
+
+                // Check for existence of new words
+                let invalidList = wordFuncs.validateWords(newWords);
+                if (invalidList.length > 0) {
+                    let message = "The following words are invalid: ";
+                    let start = true;
+                    for (let word of invalidList) {
+                        if (!start) message += ", ";
+                        message += word;
+                        start = false;
+                    }
+                    this.statusReport(message);
+                    return;
+                }
+
+                // Change the colour and player settings to the player
+                board.changeColours(newWords, player);
+                board.changeColours(crossedWords, player);
+
+                // Check for winning tile
+                gotWin = this.gameWon(newWords);
+                if (!gotWin) gotWin = this.gameWon(crossedWords);
+                if (gotWin) winner = this.userNum;
+
+            }
+            else {
+                // Check that the first word exists
+                // Get word from letters placed
+                let word = "";
+                for (let item of placed) {
+                    word += item.letter;
+                }
+                let foundObj = wordFuncs.indexFindWord(word);
+                let found = foundObj.found;
+                if (!found) {
+                    let message = word + " is not a valid word";
+                    this.statusReport(message);
+                    return;
+                }
+            }
+            
+            // Clear the temp flags from the board letters
+            board.clearTemp();
+
+            // Refill the rack
+            endOfGame = rack.replenish(this.userNum);
+
+        } // End if not player passed
+
         else {
-            // Check that the first word exists
-            // Get word from letters placed
-            let word = "";
-            for (let item of placed) {
-                word += item.letter;
-            }
-            let foundObj = wordFuncs.indexFindWord(word);
-            let found = foundObj.found;
-            if (!found) {
-                let message = word + " is not a valid word";
-                this.statusReport(message);
-                return;
-            }
+            // Clear the temp flags from the board letters
+            board.clearTemp();
+
         }
-        
 
-        // Clear the temp flags from the board letters
-        board.clearTemp();
+        this.playerPassed = false;
 
-        // Refill the rack
-        endOfGame = rack.replenish(this.userNum);
 
         // Computer Play
         if (!endOfGame && !gotWin) {
             // Allow for too many changes or passes
             let endObj = computer.play();
             gotWin = endObj.gotWin;
+            if (gotWin) this.winner = computer.playerNum;
+            else if (endObj.pass) {
+                let message = "Computer Passed";
+                this.statusReport(message);
+                if (this.passCount > 0) {
+                    endOfGame = true;
+                }
+                else this.passCount = 1;
+            }
+            else {
+                this.passCount = 0;
+            }
         }
 
         if (!gotWin && !endOfGame) {
@@ -223,6 +248,7 @@ const game = {
 
     doEndOfGame() {
         document.getElementById("gameEndDiv").style.display = "block";
+        document.getElementById("rackPlayDiv").style.display = "none";
         document.getElementById("playOptionsDiv").style.display = "none";
         document.getElementById("scoresDiv").style.display = "none";
 
@@ -252,9 +278,37 @@ const game = {
 
         // Totals
         document.getElementById("totalScore0").innerText = totalScores[0];
-        document.getElementById("totalScore0").innerText = totalScores[0];
+        document.getElementById("totalScore1").innerText = totalScores[1];
 
         // Do Message
-    }
+        let message = "";
+        if (totalScores[0] > totalScores[1]) {
+            message = "You Won the Game";
+        }
+        else if (totalScores[0] < totalScores[1]) {
+            message = "The Computer Won the Game";
+        }
+        else {
+            message = "Game Drawn";
+        }
+        document.getElementById("winMessage").innerText = message;
+    },
 
+    doPlayerPass() {
+        if (this.gameTurn === 0) {
+            message = "You cannot pass on the first turn - try Change Tiles";
+            this.statusReport(message);
+            return;
+        }
+        // Clear any player rack tiles from the board
+        board.returnPlayerTiles();
+        if (this.passCount > 0) {
+            this.doEndOfGame();
+        }
+        else {
+            this.passCount = 1;
+            this.playerPassed = true;
+            this.playWord();
+        }
+    }
 }

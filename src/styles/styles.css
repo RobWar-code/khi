@@ -134,8 +134,24 @@ body {
     text-align: center;
 }
 
+#gameEndDiv h2 {
+    font-size: 18px;
+    margin-bottom: 3px;
+}
+
+#gameEndDiv p {
+    margin-bottom: 3px;
+}
+
 #scoreTable {
     margin: 0 auto;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    text-align: left;
+}
+
+.num {
+    text-align: right;
 }
 
 /* Play Options */

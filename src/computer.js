@@ -70,15 +70,13 @@ const computer = {
         let gotWord = false;
         let gotWin = false;
         // Debug
-        /* let testRacks = [
+        let testRacks = [
+            ["R","T","X","N","M","P","W"],
             ["A","D","V","I","T","W","H"],
             ["R","D","I","W","X","Y","H"]
         ]
-        */
         while (!gotWord && !pass && changeCount < 3 && !lettersFinished) {
             let statusObj = {lettersFinished: false, changeLetters: false, pass: false, gameComplete: false};
-            // Debug 
-            // rack.racks[this.playerNum] = testRacks[game.gameTurn];
             if (game.gameTurn === 0) {
                 statusObj = this.playFirst();
             }
@@ -129,7 +127,7 @@ const computer = {
             }
         }
         // Possibly return end of game conditions
-        return {gotWin: gotWin, lettersFinished: lettersFinished}
+        return {gotWin: gotWin, pass: pass, lettersFinished: lettersFinished}
     },
 
     playFirst() {
@@ -269,7 +267,7 @@ const computer = {
                             orthogonal = orthogonal === "horizontal" ? "vertical" : "horizontal";
                         }
 
-                        let gotWin = this.addLetters(levelData, positionCellX, positionCellY, 
+                        gotWin = this.addLetters(levelData, positionCellX, positionCellY, 
                             adjCell.cellX, adjCell.cellY, orthogonal);
 
                         if (!gotWin) {
@@ -435,6 +433,7 @@ const computer = {
                         const {endOfLevels, beyondEdge} = this.getNextLevelCheckSet(levelData, level, orthogonal);
                         if (!endOfLevels && !beyondEdge) {
                             gotWin = this.addEndLetters(levelData, level + 1, orthogonal);
+                            if (gotWin) break;
                         }
                         else {
                             // get the next letter
@@ -679,7 +678,7 @@ const computer = {
                                 scanWord: scanWord,                
                                 scanData: scanData
                             }
-                            let gotWin = this.addStartLetters(layerData, newLayer, orthogonal);
+                            gotWin = this.addStartLetters(layerData, newLayer, orthogonal);
                             if (gotWin) {
                                 break;
                             }
@@ -1000,6 +999,10 @@ const computer = {
             this.hiCellY = cellY;
             this.hiNewWords = newWords;
             this.hiCrossWords = crossWords;
+        }
+        // Debug
+        if (gotWin) {
+            console.log("scoreScanWord - gotWin", gotWin);
         }
         return gotWin;
     },

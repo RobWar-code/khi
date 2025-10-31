@@ -5,56 +5,84 @@ Jobs Due
     Check existence of ST, ET, VLYS
         Check the rightAngle word in addEndLetter
 
-    Do the gotWin scenario
-    
-    Check player change colours against computer word
+    Error with tile layed by player - lost rackCell?
 
-    Change colours for computer should only mark-out crossed words in the word direction
+    Do letters finished scenario (analysis and code)
+
+    Do restart game button on game end panel - game
+
+    Consider easy/hard in game start options
+
+    Consider: At the game start allow the user to select board side and start first
 
     Clear the console logging from computer.js and board.js
-
-    Clear the last move highlighting from the computer tiles
-
-    Do not select empty rack positions
 
     Test change letters when not enough tiles left
 
     Where the computer hiScore is equal, consider random selection
 
-    Introduce score penalty for change tiles
-
-    Remove the playTurn rack test set-up
-
     Possibly change board back-ground to light grey
 
     Analyse use of test data for the board and the play 
     
-    * Deal with gotWin in end letters etc.
-
     Reduce the size of the board letters so that the background margins are larger
 
-    When the user's rack tile on the board is clicked, make it the current rack tile
-
     Consider a computer thinking display
-
-    Sort-out GitHub 2FA registration
-
-    Consider: At the game start allow the user to select board side and start first
-
-    * Build the letter combination flag lists
 
     Document layer / level object in the code
 
     Consider working through all the positions to find the best gotWin scenario. 
 
-    Do Computer Play Analysis
+    At the start of each game re-initialise the game variables and score display
+
+    Allow for computer game finished after change tiles on first word
+
+Jobs Done
+    31/10/2025
+
+    * Introduce score penalty for change tiles
+
+    * Remove the playTurn rack test set-up
+
+    * Build the letter combination flag lists
+
+    * Sort-out GitHub 2FA registration
+
+    * When the user's rack tile on the board is clicked, make it the current rack tile
+
+    * Deal with gotWin in end letters etc.
+
+    * Clear the last move highlighting from the computer tiles
+
+    * Do not select empty rack positions
+
+    * Check player change colours against computer word
+
+    * Change colours for computer should only mark-out crossed words in the word direction
+
+    * Computer passes - message
+
+    * Player Pass
+        * Computer Pass
+
+    * Player Change Tiles
+        * Computer Change Tiles
+
+    * Do the gotWin scenario
+        * Test
+
+    * Do turn score tallying
+
+    * Do turn loop
+
+    * Do Computer Play Analysis
         * First Word
-        Other Words
+        * Other Words
             * Select valid positions
             * Loop through add end letter combinations
-            Loop through start of word combinations
+            * Loop through start of word combinations
 
-    Do Computer Play First Word
+    * Do Computer Play First Word
         * Two chars
             * Do preserve highest scoring matched word
         * First four chars
@@ -62,12 +90,12 @@ Jobs Due
             * Test
         Integrate the computer turn and first word logic
         * Lay the completed word
-        Update the racks
-        Fix change tiles logic on first pass
-        Check whether words longer than 4 chars chosen
+        * Update the racks
+        * Fix change tiles logic on first pass
+        * Check whether words longer than 4 chars chosen
         
-    Do Computer Play Nonfirst words
-        Set the layer to null initially
+    * Do Computer Play Nonfirst words
+        * Set the layer to null initially
         * Do add letters to end
             * Change checkSet currentSelection flag to use null instead of -1 to indicate not set.
             * When setting the checkSet currentSelection flag for a layer, use -(layer + 1)
@@ -84,21 +112,7 @@ Jobs Due
 
     * Check all computer rack letters replaced
 
-    At the end of each turn set and display the player scores
-
-    At the start of each game re-initialise the game variables and score display
-
-    Allow for computer game finished after change tiles on first word
-
-    Do player change tiles
-        Update the display
-
-    Do turn score tallying
-
-    Do turn loop
-
-
-Jobs Done
+    * At the end of each turn set and display the player scores
 
     15/10/2025
 
