@@ -1,11 +1,52 @@
 const game = {
     userNum: 0,
-    winBonus: 10,
+    gameEdgeBonus: 10,
+    finishLettersBonus: 5,
+    winBonus: 0,
     gameTurn: 0,
     penalties: [0, 0],
     passCount: 0,
     playerPassed: false,
     winner: -1,
+    gameLevel: 1,
+
+    presentGamePlayOptions() {
+        // Reset the board
+        board.initBoard();
+
+        // Adjust the Display
+        document.getElementById("introDiv").style.display = "none";
+        document.getElementById("gameEndDiv").style.display = "none";
+        document.getElementById("playOptionsDiv").style.display = "none";
+        document.getElementById("rackPlayDiv").style.display = "none";
+        document.getElementById("gamePlayOptionsDiv").style.display = "block";
+    },
+
+    restartGame(gamePlayOption) {
+        if (gamePlayOption === "easy") {
+            this.gameLevel = 0;
+        }
+        else {
+            this.gameLevel = 1;
+        }
+
+        // Reset Game Variables
+        this.winBonus = 0;
+        this.gameTurn = 0;
+        this.penalties = [0, 0];
+        this.passCount = 0;
+        this.playerPassed = 0;
+        this.winner = -1;
+
+        // Redo the tileset
+        tileSet.startGame(false);
+
+
+        // Adjust the display
+        document.getElementById("gamePlayOptionsDiv").style.display = "none";
+        document.getElementById("playOptionsDiv").style.display = "block";
+        document.getElementById("rackPlayDiv").style.display = "block";
+    },
 
     playWord(player) {
         let gotWin = false;
@@ -122,6 +163,10 @@ const game = {
 
             // Refill the rack
             endOfGame = rack.replenish(this.userNum);
+            if (endOfGame) {
+                this.winner = this.userNum;
+                this.winBonus = this.finishLettersBonus;
+            }
 
         } // End if not player passed
 
@@ -147,6 +192,11 @@ const game = {
                     endOfGame = true;
                 }
                 else this.passCount = 1;
+            }
+            else if(endObj.lettersFinished) {
+                endOfGame = true;
+                this.winBonus = this.finishLettersBonus;
+                this.winner = computer.playerNum;
             }
             else {
                 this.passCount = 0;

@@ -33,6 +33,7 @@ const tileSet = {
 
     startGame(testGame) {
         this.fillTileHold();
+        // Debug
         if (testGame) {
             boardTest.init();
         }

@@ -242,17 +242,20 @@ const computer = {
                 ++numLevels;
             }
         }
+        // Get the play positions
+        board.getPlayPositionsList(this.playerNum);
+
         let levelData = new Array(numLevels).fill(null);
         let gotWin = false;
-        let positionCount = 0;
         let positionCellX = 0;
         let positionCellY = -1;
         let endOfPositions = false;
-        while (positionCount < this.maxTestPositions && !endOfPositions && !gotWin) {
+        while (!endOfPositions && !gotWin) {
             // Get the next position
-            let positionObj = board.findNextOwnCell(this.playerNum, positionCellX, positionCellY);
-            console.log("positionObj:",positionObj);
-            if (positionObj.ownTileFound) {
+            let mainPositionObj = board.getNextPlayPosition();
+            console.log("mainPositionObj:",mainPositionObj);
+            if (mainPositionObj.found) {
+                let positionObj = mainPositionObj.position;
                 positionCellX = positionObj.cellX;
                 positionCellY = positionObj.cellY;
                 let orthogonal;
@@ -277,7 +280,6 @@ const computer = {
                     }
                     if (gotWin) break;
                 }
-                ++positionCount;
             }
             else {
                 endOfPositions = true;

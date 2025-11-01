@@ -154,6 +154,16 @@ body {
     text-align: right;
 }
 
+/* Game Play Options */
+#gamePlayOptionsDiv {
+    display: none;
+    text-align: center;
+}
+
+#gamePlayOptionsDiv h2 {
+    font-size: 16px;
+}
+
 /* Play Options */
 #playOptionsDiv {
     margin-bottom: 8px;

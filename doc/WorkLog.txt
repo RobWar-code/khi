@@ -7,9 +7,10 @@ Jobs Due
 
     Error with tile layed by player - lost rackCell?
 
-    Do letters finished scenario (analysis and code)
-
+    Allow for all tiles captured
+    
     Do restart game button on game end panel - game
+        At the start of each game re-initialise the game variables and score display
 
     Consider easy/hard in game start options
 
@@ -17,23 +18,28 @@ Jobs Due
 
     Clear the console logging from computer.js and board.js
 
-    Test change letters when not enough tiles left
+    * Test change letters when not enough tiles left
+
+    * Do letters finished scenario (analysis and code)
 
     Where the computer hiScore is equal, consider random selection
 
-    Possibly change board back-ground to light grey
-
     Analyse use of test data for the board and the play 
-    
-    Reduce the size of the board letters so that the background margins are larger
+
+    Review the visual Design
+        Consider Bootstrap to put the score data etc. on the left on wide screens
+
+        Reduce the size of the board letters so that the background margins are larger
+
+        Possibly change board back-ground to light grey
+
+        consider borders on the tiles to make them more 3d
+
+        Consider rounded corners on the board squares to make a more appealing effect
 
     Consider a computer thinking display
 
     Document layer / level object in the code
-
-    Consider working through all the positions to find the best gotWin scenario. 
-
-    At the start of each game re-initialise the game variables and score display
 
     Allow for computer game finished after change tiles on first word
 

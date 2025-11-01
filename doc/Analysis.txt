@@ -3,7 +3,8 @@ Khi - a combative crossword game
 Contents
     Introduction and Game Play
         Tile Capture
-        Win Game Procedures
+        End of Game Procedures
+    Game Play Options
     User Options
     Technology
     Screen Layout
@@ -55,14 +56,40 @@ Contents
     Crossed words only count in the direction of the letters layed, the first
     such direction if only a single tile is layed.
 
-<h2>Win Game Procedures
-    When the gotWin flag is detected, the player is recorded and the game
-    end panel is displayed. 
+<h2>End of Game Procedures
 
-    The game end panel displays a table with the tile score, penalties,
-    bonus and total scores.
+    Edge of Board Reached
+        When the gotWin flag is detected, the player is recorded and the game
+        end panel is displayed. 
 
-    A message with "Computer Wins" or "You Win" is also displayed.
+        The game end panel displays a table with the tile score, penalties,
+        bonus and total scores.
+
+        A message with "Computer Wins" or "You Win" is also displayed.
+
+    Rack Cleared and Tile Hold Empty
+        If, after their turn the computer or player rack is empty and
+        the tile hold is empty, then the game ends. The player who
+        first empties his rack gains a bonus of five points.
+
+        The game over display is the same as for the board edge reached.
+
+    Both Players Pass 
+        The end panel is the same as for the other end scenarios, but
+        there is no bonus.
+
+<h1>Game Play Options
+    The effectiveness of the computer player has two levels, Easy and Hard.
+    These are presented as options at the start of the game.
+
+    In the hard game, the computer selects upto 8 positions of its own 
+    tiles toward the win edge of the board.
+
+    In the easy game, the computer selects up to 5 own tile positions from
+    the 12 nearest positions to the win edge.
+
+    If there are less positions left than the given ideal, then the available
+    are taken.
 
 <h1>User Options
     The user options on the screen are:

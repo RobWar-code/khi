@@ -10,6 +10,8 @@ const board = {
     starCellY1: 0,
 
     boardData: [],
+    positions: [],
+    positionNum: 0,
 
     initBoard() {
         this.buildBoard();
@@ -192,6 +194,83 @@ const board = {
         cellElem.style.backgroundColor = "#908000";
     },
 
+    getNextPlayPosition() {
+        if (this.positionNum >= this.positions.length) {
+            return {found: false}
+        }
+        else {
+            let position = this.positions[this.positionNum++];
+            return {found: true, position: position};
+        }
+    },
+
+    getPlayPositionsList(playerNum) {
+        this.positionNum = 0;
+        this.positions = [];
+
+        // Get the number of positions required
+        let numPositions = 8;
+        if (game.level === 0) {
+            numPositions = 12;
+        }
+
+        // Get Each Cell Position
+        let ix;
+        let positionsList = [];
+        let positionCellY = -1;
+        let positionCellX = 0;
+        let gotEdge = false;
+        let ownTileFound = true;
+        let count = 0;
+        while (!gotEdge && count < numPositions && ownTileFound) {
+            let cellObj = this.findNextOwnCell(playerNum, positionCellX, positionCellY);
+            console.log(cellObj);
+            if (cellObj.gotEdge || !cellObj.ownTileFound) {
+                gotEdge = true;
+                ownTileFound = false;
+            }
+            else {
+                positionCellX = cellObj.cellX;
+                positionCellY = cellObj.cellY;
+                let item = {
+                    cellX: cellObj.cellX,
+                    cellY: cellObj.cellY,
+                    validCells: cellObj.validCells
+                }
+                positionsList.push(item);
+                ++count;
+            }
+        }
+        if (count > 0) {
+            if (game.gameLevel === 1) {
+                this.positions = positionsList;
+            }
+            else {
+                // Select upto five items from the positions
+                // Get array of indices to shuffle
+                ix = [];
+                for (let i = 0; i < count; i++) {
+                    ix.push(i);
+                }
+                // Shuffle
+                for (let i = 0; i < count; i++) {
+                    let a = ix[i];
+                    let p = Math.floor(Math.random() * count);
+                    ix[i] = ix[p];
+                    ix[p] = a;
+                }
+                // Build the positions list
+                let limit = 5;
+                if (count < limit) limit = count;
+                for (let i = 0; i < limit; i++) {
+                    let p = ix.pop();
+                    this.positions.push(JSON.parse(JSON.stringify(positionsList[p])));
+                }
+            }
+        }
+        console.log("this.positions:", this.positions, ix, count)
+    },
+
     findNextOwnCell(playerNum, positionCellX, positionCellY) {
 
         const adj = [
@@ -216,10 +295,6 @@ const board = {
                 if (positionCellX >= this.boardWidth) gotEdge = true;
             }
             if (!gotEdge) {
-                // Debug
-                if (positionCellY === 9 && positionCellX === 14) {
-                    console.log("boardData:", this.boardData[positionCellY][positionCellX]);
-                }
                 // If own tile
                 if (this.boardData[positionCellY][positionCellX].playerNum === playerNum) {
                     // Check the adjacent squares

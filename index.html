@@ -116,6 +116,12 @@
         <button class="textButton" id="playAgain">Play Again</button>
     </div>
     
+    <div id="gamePlayOptionsDiv">
+        <h2>Game Play Options</h2>
+        <button class="textButton" id="easyGame">Easy</button>
+        <button class="textButton" id="hardGame">Hard</button>
+    </div>
+
     <div id="playOptionsDiv">
         <button class="textButton" id="passOpt">Pass</button>
         <button class="textButton" id="playWordOpt">Play Word</button>
@@ -182,13 +188,18 @@
     let playWordOpt = document.getElementById("playWordOpt");
     let passOpt = document.getElementById("passOpt");
     let changeTilesOpt = document.getElementById("changeTilesOpt");
+    let playAgain = document.getElementById("playAgain");
+    let easyGame = document.getElementById("easyGame");
+    let hardGame = document.getElementById("hardGame");
 
     introDismiss.addEventListener('click', () => {
         if (!gameStarted) {
-            tileSet.startGame(testGame);
+            game.presentGamePlayOptions();
             gameStarted = true;
         }
-        document.getElementById("introDiv").style.display = "none";
+        else {
+            document.getElementById("introDiv").style.display = "none";
+        }
     });
 
     playWordOpt.addEventListener("click", () => {
@@ -202,6 +213,12 @@
 
     changeTilesOpt.addEventListener("click", () => {rack.changeTiles(game.userNum)});
     
+    playAgain.addEventListener("click", () => {game.presentGamePlayOptions()});
+
+    easyGame.addEventListener("click", () => {game.restartGame("easy")});
+
+    hardGame.addEventListener("click", () => {game.restartGame("hard")});
+
     // Initialisation
     wordFuncs.loadWordList();
     board.initBoard();
