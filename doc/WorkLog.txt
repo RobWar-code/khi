@@ -2,29 +2,13 @@ Work Log
 
 Jobs Due
 
-    Check existence of ST, ET, VLYS
-        Check the rightAngle word in addEndLetter
+    Favicon icon
 
     Error with tile layed by player - lost rackCell?
 
-    Allow for all tiles captured
-    
-    Do restart game button on game end panel - game
-        At the start of each game re-initialise the game variables and score display
-
-    Consider easy/hard in game start options
-
     Consider: At the game start allow the user to select board side and start first
 
-    Clear the console logging from computer.js and board.js
-
-    * Test change letters when not enough tiles left
-
-    * Do letters finished scenario (analysis and code)
-
     Where the computer hiScore is equal, consider random selection
-
-    Analyse use of test data for the board and the play 
 
     Review the visual Design
         Consider Bootstrap to put the score data etc. on the left on wide screens
@@ -39,11 +23,30 @@ Jobs Due
 
     Consider a computer thinking display
 
-    Document layer / level object in the code
-
     Allow for computer game finished after change tiles on first word
 
 Jobs Done
+    02/11/2025
+
+    * Clear the console logging from computer.js and board.js
+
+    * Document layer / level object in the code
+
+    * Test change letters when not enough tiles left
+
+    * Do letters finished scenario (analysis and code)
+
+    * Test player wins
+
+    * Provide easy/moderate/hard levels
+
+    * Allow for all tiles captured
+    
+    * Do restart game button on game end panel - game
+        * At the start of each game re-initialise the game variables and score display
+
+    * Consider easy/hard in game start options
+
     31/10/2025
 
     * Introduce score penalty for change tiles

@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="src/styles/styles.css">
+    <title>Khi - Crossword Combat</title>
 </head>
 <body>
 
@@ -61,116 +62,122 @@
         </tr>
     </table>
 
-    <!-- Board and Rack -->
-    <div id="boardDiv">
-        <table id="board">
-
-        </table>
-    </div>
-
-    <div id="rackPlayDiv">
-        <table id="rackTable">
-            <tr>
-                <td class="rackCell" id="rackCell0" onclick="rack.tileClick(event);"></td>
-                <td class="rackCell" id="rackCell1" onclick="rack.tileClick(event);"></td>
-                <td class="rackCell" id="rackCell2" onclick="rack.tileClick(event);"></td>
-                <td class="rackCell" id="rackCell3" onclick="rack.tileClick(event);"></td>
-                <td class="rackCell" id="rackCell4" onclick="rack.tileClick(event);"></td>
-                <td class="rackCell" id="rackCell5" onclick="rack.tileClick(event);"></td>
-                <td class="rackCell" id="rackCell6" onclick="rack.tileClick(event);"></td>
-            </tr>
-        </table>
-    </div>
-
-    <div id="gameEndDiv">
-        <h2>**Game Over**</h2>
-        <p>Scores</p>
-        <table id="scoreTable">
-            <tr>
-                <th></th>
-                <th>Player</td>
-                <th>Computer</td>
-            </tr>
-            <tr>
-                <td>Tile Score</td>
-                <td class="num" id="tileScore0"></td>
-                <td class="num" id="tileScore1"></td>
-            </tr>
-            <tr>
-                <td>Penalties</td>
-                <td class="num" id="penalty0"></td>
-                <td class="num" id="penalty1"></td>
-            </tr>
-            <tr>
-                <td>Bonus</td>
-                <td class="num" id="bonus0"></td>
-                <td class="num" id="bonus1"></td>
-            </tr>
-            <tr>
-                <td>Total</td>
-                <td class="num" id="totalScore0"></td>
-                <td class="num" id="totalScore1"></td>
-            </tr>
-        </table>
-        <p id="winMessage"></p>
-        <button class="textButton" id="playAgain">Play Again</button>
-    </div>
     
-    <div id="gamePlayOptionsDiv">
-        <h2>Game Play Options</h2>
-        <button class="textButton" id="easyGame">Easy</button>
-        <button class="textButton" id="hardGame">Hard</button>
-    </div>
+    <!-- Board -->
+    <div class="row">
+        <div class="col" id="boardDiv">
+            <table id="board">
 
-    <div id="playOptionsDiv">
-        <button class="textButton" id="passOpt">Pass</button>
-        <button class="textButton" id="playWordOpt">Play Word</button>
-        <button class="textButton" id="changeTilesOpt">Change Tiles (-10)</button>
-        <button class="textButton" id="restartOpt">Restart Game</button>
-    </div>
+            </table>
+        </div>
+                
+        <div class="col" id="infoDiv">
+            <div id="rackPlayDiv">
+                <table id="rackTable">
+                    <tr>
+                        <td class="rackCell" id="rackCell0" onclick="rack.tileClick(event);"></td>
+                        <td class="rackCell" id="rackCell1" onclick="rack.tileClick(event);"></td>
+                        <td class="rackCell" id="rackCell2" onclick="rack.tileClick(event);"></td>
+                        <td class="rackCell" id="rackCell3" onclick="rack.tileClick(event);"></td>
+                        <td class="rackCell" id="rackCell4" onclick="rack.tileClick(event);"></td>
+                        <td class="rackCell" id="rackCell5" onclick="rack.tileClick(event);"></td>
+                        <td class="rackCell" id="rackCell6" onclick="rack.tileClick(event);"></td>
+                    </tr>
+                </table>
+            </div>
 
-    <div id="scoresDiv">
-        <h2 id="scoresTitle">Current Scores</h2>
-        <p>You: <span id="playerScore"></span> Computer: <span id="computerScore"></span></p>
-    </div>
-    
-    <div id="starLetterDiv">
-        <h3>Select A Letter</h3>
-        <table id="starLetterTable">
-            <tr>
-                <td onclick="rack.selectStarLetter(event)">A</td>
-                <td onclick="rack.selectStarLetter(event)">B</td>
-                <td onclick="rack.selectStarLetter(event)">C</td>
-                <td onclick="rack.selectStarLetter(event)">D</td>
-                <td onclick="rack.selectStarLetter(event)">E</td>
-                <td onclick="rack.selectStarLetter(event)">F</td>
-                <td onclick="rack.selectStarLetter(event)">G</td>
-                <td onclick="rack.selectStarLetter(event)">H</td>
-                <td onclick="rack.selectStarLetter(event)">I</td>
-                <td onclick="rack.selectStarLetter(event)">J</td>
-                <td onclick="rack.selectStarLetter(event)">K</td>
-                <td onclick="rack.selectStarLetter(event)">L</td>
-                <td onclick="rack.selectStarLetter(event)">M</td>
-            </tr>
-            <tr>
-                <td onclick="rack.selectStarLetter(event)">N</td>
-                <td onclick="rack.selectStarLetter(event)">O</td>
-                <td onclick="rack.selectStarLetter(event)">P</td>
-                <td onclick="rack.selectStarLetter(event)">Q</td>
-                <td onclick="rack.selectStarLetter(event)">R</td>
-                <td onclick="rack.selectStarLetter(event)">S</td>
-                <td onclick="rack.selectStarLetter(event)">T</td>
-                <td onclick="rack.selectStarLetter(event)">U</td>
-                <td onclick="rack.selectStarLetter(event)">V</td>
-                <td onclick="rack.selectStarLetter(event)">W</td>
-                <td onclick="rack.selectStarLetter(event)">X</td>
-                <td onclick="rack.selectStarLetter(event)">Y</td>
-                <td onclick="rack.selectStarLetter(event)">Z</td>
-            </tr>
-        </table>
-    </div>
+            <div id="gameEndDiv">
+                <h2>**Game Over**</h2>
+                <p>Scores</p>
+                <table id="scoreTable">
+                    <tr>
+                        <th></th>
+                        <th>Player</td>
+                        <th>Computer</td>
+                    </tr>
+                    <tr>
+                        <td>Tile Score</td>
+                        <td class="num" id="tileScore0"></td>
+                        <td class="num" id="tileScore1"></td>
+                    </tr>
+                    <tr>
+                        <td>Penalties</td>
+                        <td class="num" id="penalty0"></td>
+                        <td class="num" id="penalty1"></td>
+                    </tr>
+                    <tr>
+                        <td>Bonus</td>
+                        <td class="num" id="bonus0"></td>
+                        <td class="num" id="bonus1"></td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td class="num" id="totalScore0"></td>
+                        <td class="num" id="totalScore1"></td>
+                    </tr>
+                </table>
+                <p id="winMessage"></p>
+                <button class="textButton" id="playAgain">Play Again</button>
+            </div>
+            
+            <div id="gamePlayOptionsDiv">
+                <h2>Game Play Options</h2>
+                <button class="textButton" id="easyGame">Easy</button>
+                <button class="textButton" id="moderateGame">Moderate</button>
+                <button class="textButton" id="hardGame">Hard</button>
+            </div>
 
-    <div id="statusDiv"></div>
+            <div id="playOptionsDiv">
+                <button class="textButton" id="passOpt">Pass</button>
+                <button class="textButton" id="playWordOpt">Play Word</button>
+                <button class="textButton" id="changeTilesOpt">Change Tiles (-10)</button>
+                <button class="textButton" id="restartOpt">Restart Game</button>
+            </div>
+
+            <div id="scoresDiv">
+                <h2 id="scoresTitle">Current Scores</h2>
+                <p>You: <span id="playerScore"></span> Computer: <span id="computerScore"></span></p>
+            </div>
+            
+            <div id="starLetterDiv">
+                <h3>Select A Letter</h3>
+                <table id="starLetterTable">
+                    <tr>
+                        <td onclick="rack.selectStarLetter(event)">A</td>
+                        <td onclick="rack.selectStarLetter(event)">B</td>
+                        <td onclick="rack.selectStarLetter(event)">C</td>
+                        <td onclick="rack.selectStarLetter(event)">D</td>
+                        <td onclick="rack.selectStarLetter(event)">E</td>
+                        <td onclick="rack.selectStarLetter(event)">F</td>
+                        <td onclick="rack.selectStarLetter(event)">G</td>
+                        <td onclick="rack.selectStarLetter(event)">H</td>
+                        <td onclick="rack.selectStarLetter(event)">I</td>
+                        <td onclick="rack.selectStarLetter(event)">J</td>
+                        <td onclick="rack.selectStarLetter(event)">K</td>
+                        <td onclick="rack.selectStarLetter(event)">L</td>
+                        <td onclick="rack.selectStarLetter(event)">M</td>
+                    </tr>
+                    <tr>
+                        <td onclick="rack.selectStarLetter(event)">N</td>
+                        <td onclick="rack.selectStarLetter(event)">O</td>
+                        <td onclick="rack.selectStarLetter(event)">P</td>
+                        <td onclick="rack.selectStarLetter(event)">Q</td>
+                        <td onclick="rack.selectStarLetter(event)">R</td>
+                        <td onclick="rack.selectStarLetter(event)">S</td>
+                        <td onclick="rack.selectStarLetter(event)">T</td>
+                        <td onclick="rack.selectStarLetter(event)">U</td>
+                        <td onclick="rack.selectStarLetter(event)">V</td>
+                        <td onclick="rack.selectStarLetter(event)">W</td>
+                        <td onclick="rack.selectStarLetter(event)">X</td>
+                        <td onclick="rack.selectStarLetter(event)">Y</td>
+                        <td onclick="rack.selectStarLetter(event)">Z</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="statusDiv"></div>
+        </div>
+    </div>
 
 <script src="src/game.js"></script>
 <script src="src/board.js"></script>
@@ -190,6 +197,7 @@
     let changeTilesOpt = document.getElementById("changeTilesOpt");
     let playAgain = document.getElementById("playAgain");
     let easyGame = document.getElementById("easyGame");
+    let moderateGame = document.getElementById("moderateGame");
     let hardGame = document.getElementById("hardGame");
 
     introDismiss.addEventListener('click', () => {
@@ -216,6 +224,8 @@
     playAgain.addEventListener("click", () => {game.presentGamePlayOptions()});
 
     easyGame.addEventListener("click", () => {game.restartGame("easy")});
+
+    moderateGame.addEventListener("click", () => {game.restartGame("moderate")});
 
     hardGame.addEventListener("click", () => {game.restartGame("hard")});
 

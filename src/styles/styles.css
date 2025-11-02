@@ -50,11 +50,24 @@ body {
     background-color: #50f050;
 }
 
+/* Layout */
+.row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+}
+
+.col {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
 /* Main Board */
 #boardDiv {
     margin-top: 8px;
     margin-bottom: 8px;
-    width: 100%;
     text-align: center;
 }
 
@@ -62,7 +75,6 @@ body {
     margin: 0 auto;
     border-collapse: collapse;
     border-spacing: 0;
-    border: 1px solid black;
     background-color: #908000;
 }
 
@@ -70,32 +82,40 @@ body {
     width: 17px;
     height: 17px;
     padding-left: 2px;
-    border-right: 1px solid #303030;
-    border-bottom: 1px solid #303030;
+    border: 1px solid #101010;
+    border-radius: 6px;
 }
 
 .boardLetterDiv {
     margin: 0;
-    border-right: 1px solid #606060;
-    border-top: 1px solid #606060;
-    width: 15px;
-    height: 15px;
-    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    font-size: 13px;
     font-weight: bold;
 }
 
 .boardTileBlack {
     background-color: black;
+    border-left: 1px solid #505050;
+    border-bottom: 1px solid #505050;
     color: white;
 }
 
 .boardTileBlue {
     background-color: #40e0f0;
+    border-left: 1px solid #101010;
+    border-bottom: 1px solid #101010;
     color: black; 
+}
+
+/* Information Panel */
+#infoDiv {
+    padding-top: 8px;
 }
 
 /* Rack Section */
 #rackPlayDiv {
+    display: block;
     width: calc(100% - 8px);
     background-color:bisque;
     margin-bottom: 8px;
@@ -166,6 +186,7 @@ body {
 
 /* Play Options */
 #playOptionsDiv {
+    display: block;
     margin-bottom: 8px;
     width: calc(100% - 8px);
     padding: 4px;

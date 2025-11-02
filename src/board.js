@@ -210,8 +210,8 @@ const board = {
 
         // Get the number of positions required
         let numPositions = 8;
-        if (game.level === 0) {
-            numPositions = 12;
+        if (game.level < 2) {
+            numPositions = 20;
         }
 
         // Get Each Cell Position
@@ -224,7 +224,6 @@ const board = {
         let count = 0;
         while (!gotEdge && count < numPositions && ownTileFound) {
             let cellObj = this.findNextOwnCell(playerNum, positionCellX, positionCellY);
-            console.log(cellObj);
             if (cellObj.gotEdge || !cellObj.ownTileFound) {
                 gotEdge = true;
                 ownTileFound = false;
@@ -261,6 +260,7 @@ const board = {
                 }
                 // Build the positions list
                 let limit = 5;
+                if (game.gameLevel === 0) limit = 3;
                 if (count < limit) limit = count;
                 for (let i = 0; i < limit; i++) {
                     let p = ix.pop();
@@ -268,7 +268,6 @@ const board = {
                 }
             }
         }
-        console.log("this.positions:", this.positions, ix, count)
     },
 
     findNextOwnCell(playerNum, positionCellX, positionCellY) {
@@ -484,7 +483,6 @@ const board = {
 
     setComputerWord() {
         let placed = rack.lettersPlaced[computer.playerNum];
-        console.log("setComputerWord: placed", placed);
         for (let item of placed) {
             let cellX = item.cellX;
             let cellY = item.cellY;

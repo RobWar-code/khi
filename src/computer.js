@@ -140,7 +140,6 @@ const computer = {
             }
         }
 
-        console.log("rack:", ownRack);
         // Check the rack letters for vowels
         let vowelCount = this.countVowels(ownRack);
         if (vowelCount === 0) {
@@ -234,7 +233,6 @@ const computer = {
     },
 
     playTurn() {
-        console.log("rack:", rack.racks[this.playerNum]);
         // Get number of levels
         let numLevels = 0;
         for (let c of rack.racks[this.playerNum]) {
@@ -253,7 +251,6 @@ const computer = {
         while (!endOfPositions && !gotWin) {
             // Get the next position
             let mainPositionObj = board.getNextPlayPosition();
-            console.log("mainPositionObj:",mainPositionObj);
             if (mainPositionObj.found) {
                 let positionObj = mainPositionObj.position;
                 positionCellX = positionObj.cellX;
@@ -285,9 +282,6 @@ const computer = {
                 endOfPositions = true;
             }
         }
-        console.log("Completed positions: hiScore, hiCombo - ", this.hiScore, this.hiCombo);
-        console.log("hiNewWords", this.hiNewWords);
-        console.log("hiCrossWords", this.hiCrossWords);
         return gotWin;
     },
 
@@ -1001,10 +995,6 @@ const computer = {
             this.hiCellY = cellY;
             this.hiNewWords = newWords;
             this.hiCrossWords = crossWords;
-        }
-        // Debug
-        if (gotWin) {
-            console.log("scoreScanWord - gotWin", gotWin);
         }
         return gotWin;
     },

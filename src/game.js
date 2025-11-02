@@ -26,8 +26,11 @@ const game = {
         if (gamePlayOption === "easy") {
             this.gameLevel = 0;
         }
-        else {
+        else if (gamePlayOption === "moderate") {
             this.gameLevel = 1;
+        }
+        else {
+            this.gameLevel = 2;
         }
 
         // Reset Game Variables
@@ -101,7 +104,6 @@ const game = {
             if (this.gameTurn > 0) {
                 // Check that word is joined to own colour
                 const {joins, ownJoin} = board.checkWordJoins(placed, player);
-                console.log("playWord: joins, ownJoin", joins, ownJoin);
                 if (joins.length === 0) {
                     let message = "Your word must join another word on the board";
                     this.statusReport(message);
@@ -115,8 +117,6 @@ const game = {
 
                 // Collect new words and crossed words
                 const {newWords, crossedWords} = board.extractWords(placed, joins, orthogonal);
-                console.log("playWord: - newWords", newWords);
-                console.log("playWord: - crossedWords", crossedWords);
 
                 // Check for existence of new words
                 let invalidList = wordFuncs.validateWords(newWords);
@@ -263,13 +263,18 @@ const game = {
         return {error: false, orthogonal: orthogonal};
     },
 
-    statusReport (message) {
+    statusReport (message, static) {
         let statusDiv = document.getElementById("statusDiv");
         statusDiv.style.display = "block";
         statusDiv.innerText = message;
-        setTimeout(() => {
-            statusDiv.style.display = "none";
-        }, 8000);
+        if (typeof static === "undefined") static = false;
+        // Debug
+        else console.log("static:", static);
+        if (!static) {
+            setTimeout(() => {
+                statusDiv.style.display = "none";
+            }, 8000);
+        }
     },
 
     displayCurrentScores() {
@@ -288,7 +293,7 @@ const game = {
         // Check through the word set for edge tile
         let found = false;
         for (let item of wordSet) {
-            if (wordSet.endX === board.boardWidth - 1) {
+            if (item.endX === board.boardWidth - 1) {
                 found = true;
                 break;
             }
@@ -305,6 +310,11 @@ const game = {
         let totalScores = [0, 0];
         // Get the tile scores
         let tileScores = board.getTileScores();
+        // Check whether all tiles captured
+        if (tileScores[0] === 0 || tileScores[1] === 0) {
+            this.winBonus = 20;
+        }
+
         document.getElementById("tileScore0").innerText = tileScores[0];
         document.getElementById("tileScore1").innerText = tileScores[1];
         totalScores[0] += tileScores[0];

@@ -67,6 +67,9 @@ Contents
 
         A message with "Computer Wins" or "You Win" is also displayed.
 
+        A bonus of ten is received for reaching the edge of board, 20 if
+        all of the opponent's tiles are captured.
+
     Rack Cleared and Tile Hold Empty
         If, after their turn the computer or player rack is empty and
         the tile hold is empty, then the game ends. The player who
