@@ -79,7 +79,9 @@ body {
     margin: 0 auto;
     border-collapse: collapse;
     border-spacing: 0;
-    background-color: #908000;
+    background-image: url("../../assets/gridBackground.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
 }
 
 #board td {
@@ -88,6 +90,7 @@ body {
     padding-left: 2px;
     border: 1px solid #101010;
     border-radius: 6px;
+    background-color: rgba(0,0,0,0);
 }
 
 .boardLetterDiv {
@@ -100,8 +103,8 @@ body {
 
 .boardTileBlack {
     background-color: black;
-    border-left: 1px solid #505050;
-    border-bottom: 1px solid #505050;
+    border-left: 1px solid #606060;
+    border-bottom: 1px solid #606060;
     color: white;
 }
 

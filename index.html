@@ -60,6 +60,7 @@
             <td id="menuTitleCell">Crossword Combat Game</td>
             <td id="menuOptionsCell">
                 <button class="menuBtn" id="introBtn">Intro</button>
+                <button class="menuBtn" id="homeBtn">Home</button>
             </td>
         </tr>
     </table>
@@ -195,6 +196,7 @@
     // Events
     let introDismiss = document.getElementById("introDismiss");
     let introBtn = document.getElementById("introBtn");
+    let homeBtn = document.getElementById("homeBtn");
     let playWordOpt = document.getElementById("playWordOpt");
     let passOpt = document.getElementById("passOpt");
     let changeTilesOpt = document.getElementById("changeTilesOpt");
@@ -207,6 +209,10 @@
     introBtn.addEventListener('click', () => {
         if (!gameStarted) return;
         document.getElementById("introDiv").style.display = "block";
+    });
+
+    homeBtn.addEventListener('click', () => {
+        window.location = '../index.html';
     });
 
     introDismiss.addEventListener('click', () => {

@@ -113,7 +113,7 @@ const board = {
 
     displayTile(cellX, cellY) {
         let item = this.boardData[cellY][cellX];
-        let background = "#908000";
+        let background = "rgba(0,0,0,0)";
         if (item.temp) {
             background = "#f0a0a0";
         }
@@ -191,7 +191,7 @@ const board = {
             // Show star start symbol
             cellElem.innerHTML = `<img src="assets/boardStar2.png" width="17" height="17">`;
         }
-        cellElem.style.backgroundColor = "#908000";
+        cellElem.style.backgroundColor = "rgba(0,0,0,0)";
     },
 
     getNextPlayPosition() {
