@@ -157,7 +157,8 @@ const wordFuncs = {
         let invalid = [];
         for (let wordItem of wordSet) {
             let word = wordItem.word;
-            if (this.indexFindWord(word) === false) {
+            let foundObj = this.indexFindWord(word);
+            if (foundObj.found === false) {
                 invalid.push(word);
             }
         }

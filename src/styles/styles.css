@@ -53,12 +53,12 @@ body {
 /* Layout */
 .row {
     display: flex;
-    align-items: stretch;
+    justify-content: center;
     gap: 0;
 }
 
 .col {
-    flex: 1 1 0;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -66,8 +66,12 @@ body {
 
 /* Main Board */
 #boardDiv {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    width: 380px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: #909040;
     text-align: center;
 }
 
@@ -110,7 +114,9 @@ body {
 
 /* Information Panel */
 #infoDiv {
+    width: 380px;
     padding-top: 8px;
+    background-color: #a0a040;
 }
 
 /* Rack Section */
@@ -235,5 +241,18 @@ body {
 @media screen and (max-width: 800px) {
     #introDiv p {
         width: 85%;
+    }
+
+    .row {
+        display: block;
+    }
+    .col {
+        display: block;
+    }
+}
+@media screen and (max-width: 400px) {
+    #boardDiv {
+        padding-left: 0;
+        padding-right: 0;
     }
 }

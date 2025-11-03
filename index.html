@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="icon.png" sizes="32x32" type="image/x-icon">
     <link rel="stylesheet" href="src/styles/styles.css">
+    <meta name="description" content="Combative Crossword Game">
+    <meta name="keywords" content="game, crossword">
     <title>Khi - Crossword Combat</title>
 </head>
 <body>
@@ -57,7 +60,6 @@
             <td id="menuTitleCell">Crossword Combat Game</td>
             <td id="menuOptionsCell">
                 <button class="menuBtn" id="introBtn">Intro</button>
-                <button class="menuBtn" id="gameScoresBtn">Game Scores</button>
             </td>
         </tr>
     </table>
@@ -192,13 +194,20 @@
 
     // Events
     let introDismiss = document.getElementById("introDismiss");
+    let introBtn = document.getElementById("introBtn");
     let playWordOpt = document.getElementById("playWordOpt");
     let passOpt = document.getElementById("passOpt");
     let changeTilesOpt = document.getElementById("changeTilesOpt");
+    let restartOpt = document.getElementById("restartOpt");
     let playAgain = document.getElementById("playAgain");
     let easyGame = document.getElementById("easyGame");
     let moderateGame = document.getElementById("moderateGame");
     let hardGame = document.getElementById("hardGame");
+
+    introBtn.addEventListener('click', () => {
+        if (!gameStarted) return;
+        document.getElementById("introDiv").style.display = "block";
+    });
 
     introDismiss.addEventListener('click', () => {
         if (!gameStarted) {
@@ -221,6 +230,8 @@
 
     changeTilesOpt.addEventListener("click", () => {rack.changeTiles(game.userNum)});
     
+    restartOpt.addEventListener("click", () => {game.presentGamePlayOptions()});
+
     playAgain.addEventListener("click", () => {game.presentGamePlayOptions()});
 
     easyGame.addEventListener("click", () => {game.restartGame("easy")});

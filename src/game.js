@@ -19,6 +19,7 @@ const game = {
         document.getElementById("gameEndDiv").style.display = "none";
         document.getElementById("playOptionsDiv").style.display = "none";
         document.getElementById("rackPlayDiv").style.display = "none";
+        document.getElementById("scoresDiv").style.display = "none";
         document.getElementById("gamePlayOptionsDiv").style.display = "block";
     },
 

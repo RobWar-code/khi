@@ -10,22 +10,35 @@ Jobs Due
 
     Where the computer hiScore is equal, consider random selection
 
-    Review the visual Design
-        Consider Bootstrap to put the score data etc. on the left on wide screens
+    Consider match scores list for the session - withdraw the menu score option for now.
 
-        Reduce the size of the board letters so that the background margins are larger
+    Consider a marbelled effect for empty squares on the board transparent td's?
+        Experiment.
 
-        Possibly change board back-ground to light grey
+    Do systems Test plan 
 
-        consider borders on the tiles to make them more 3d
-
-        Consider rounded corners on the board squares to make a more appealing effect
+    Execute systems test plan (exhaustive playing)
 
     Consider a computer thinking display
 
     Allow for computer game finished after change tiles on first word
 
 Jobs Done
+    04/11/2025
+
+    * Do the menu Intro button
+
+    * Review the visual Design
+        * Consider Bootstrap to put the score data etc. on the right on wide screens - used flex
+
+        * Reduce the size of the board letters so that the background margins are larger
+
+        N/A Possibly change board back-ground to light grey
+
+        * consider borders on the tiles to make them more 3d
+
+        N/A Consider rounded corners on the board squares to make a more appealing effect
+
     02/11/2025
 
     * Clear the console logging from computer.js and board.js
