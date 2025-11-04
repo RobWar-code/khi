@@ -2,6 +2,7 @@ Khi - a combative crossword game
 
 Contents
     Introduction and Game Play
+        Adding Letters to the Board
         Tile Capture
         End of Game Procedures
     Game Play Options
@@ -46,6 +47,16 @@ Contents
 
     If a player cannot form a word he can pass. He may also change all
     of his letters for a penalty of 10 points.
+
+<h2>Adding Letters to the Board
+    Letters are added to the board by clicking a letter tile on the rack
+    and then clicking the required square on the board.
+
+    If the rack tile clicked is a star, the user is presented with
+    the alphabet in a grid. Clicking a cell in the grid chooses the
+    letter to be placed. The rack and the play options are hidden
+    whilst the star letter is being selected and revealed again when
+    the letter is chosen.
 
 <h2>Tile Capture
     A player must join new words to a letter of his own colour on the 

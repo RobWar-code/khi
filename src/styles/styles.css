@@ -203,6 +203,10 @@ body {
     background-color: bisque;
 }
 
+.opt {
+    margin-top: 4px;
+}
+
 /* Score Panel */
 #scoresDiv {
     display: none;
@@ -247,10 +251,8 @@ body {
     }
 
     .row {
-        display: block;
-    }
-    .col {
-        display: block;
+        flex-direction: column;
+        align-items: center;
     }
 }
 @media screen and (max-width: 400px) {

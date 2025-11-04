@@ -88,6 +88,8 @@ const rack = {
         let isStar = false;
         if (letter === "*") {
             isStar = true;
+            document.getElementById("rackPlayDiv").style.display = "none";
+            document.getElementById("playOptionsDiv").style.display = "none";
             document.getElementById("starLetterDiv").style.display = "block";
             this.starCellX = cellX;
             this.starCellY = cellY;
@@ -134,6 +136,8 @@ const rack = {
         let star = true;
         board.setTempTile(cellX, cellY, letter, star);
 
+        document.getElementById("rackPlayDiv").style.display = "block";
+        document.getElementById("playOptionsDiv").style.display = "block";
         document.getElementById("starLetterDiv").style.display = "none";
         this.currentRackTile = -1;
     },

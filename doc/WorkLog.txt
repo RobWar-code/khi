@@ -2,35 +2,47 @@ Work Log
 
 Jobs Due
 
-    Favicon icon
-
-    Error with tile layed by player - lost rackCell?
-
     Consider: At the game start allow the user to select board side and start first
 
     Where the computer hiScore is equal, consider random selection
 
-    Do systems Test plan 
-
-    Execute systems test plan (exhaustive playing)
-
-    * Home button
-
-    Link button in narayana-art.co.uk/index.html
-
-    Copy site to server
-
     Consider match scores list for the session - withdraw the menu score option for now.
-
-    Consider a marbelled effect for empty squares on the board transparent td's?
-        Experiment.
 
     Consider a computer thinking display
 
     Allow for computer game finished after change tiles on first word
 
+    Win bonus for computer missing - possibly end of game set.
+
 Jobs Done
     04/11/2025
+
+    * Mobile Adjustments 
+
+        * Center the divs at 800px or less
+
+        * Adjust layout of options for mobile (margin top on buttons)
+
+        * When the star select letter box is shown, hide the game options
+
+        * Change the start tile graphics for something brighter
+
+    * Favicon icon
+
+    * Do systems Test plan 
+
+    * Execute systems test plan (exhaustive playing)
+
+    * Home button
+
+    * Link button in narayana-art.co.uk/index.html
+
+    * Copy site to server
+
+    * Consider a marbelled effect for empty squares on the board transparent td's?
+        Experiment.
+
+    * Error with tile layed by player - lost rackCell?
 
     * Do the menu Intro button
 

@@ -33,7 +33,7 @@ const board = {
             for (let col = 0; col < this.boardHeight; col++) {
                 html += `<td class="boardCell" id="cell${cellNum}" onclick="board.cellClicked(event)">`;
                 if (cellNum === this.starCell1 || cellNum === this.starCell2) {
-                    html += `<img src="assets/boardStar2.png" width="17" height="17">`;
+                    html += `<img src="assets/boardStar3.png" width="16" height="16">`;
                 }
                 html += "</td>";
                 ++cellNum;
@@ -189,7 +189,7 @@ const board = {
         cellElem.innerHTML = "";
         if (cellNum === this.starCell1 || cellNum === this.starCell2) {
             // Show star start symbol
-            cellElem.innerHTML = `<img src="assets/boardStar2.png" width="17" height="17">`;
+            cellElem.innerHTML = `<img src="assets/boardStar3.png" width="16" height="16">`;
         }
         cellElem.style.backgroundColor = "rgba(0,0,0,0)";
     },
