@@ -1,5 +1,6 @@
 const game = {
     userNum: 0,
+    allTilesCapturedBonus: 20,
     gameEdgeBonus: 10,
     finishLettersBonus: 5,
     winBonus: 0,
@@ -114,6 +115,7 @@ const game = {
                 if (!ownJoin) {
                     let message = "Your word must join at least one tile of your own";
                     this.statusReport(message);
+                    return;
                 }
 
                 // Collect new words and crossed words
@@ -140,8 +142,10 @@ const game = {
                 // Check for winning tile
                 gotWin = this.gameWon(newWords);
                 if (!gotWin) gotWin = this.gameWon(crossedWords);
-                if (gotWin) winner = this.userNum;
-
+                if (gotWin) {
+                    this.winner = this.userNum;
+                    this.winBonus = 10;
+                }
             }
             else {
                 // Check that the first word exists

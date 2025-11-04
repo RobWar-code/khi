@@ -1,0 +1,69 @@
+
+* App load - intro display over board
+* App Dismiss Button - clears intro, game play options presented
+* Check game play option button correctly starts the game
+    * Easy
+    * Moderate
+    * Hard
+* Check the restart game option
+* Check the menu Intro option
+* Check the menu Home option
+* Click letter on rack - ensure highlighted
+* Click another letter on the rack - ensure only that is highlighted
+* Click play word option - ensure no action
+* Click change tiles option - ensure letters changed
+* Click the board - ensure no action
+* Click the pass option - ensure that the message "You cannot pass on the first turn" appears
+* Click a tile on the rack, then click anywhere on the board, ensure the tile disappears from
+the rack and appears on the board.
+* Click the empty space on the rack - ensure no action
+* Click the tile on the board - ensure that it is returned to the rack and highlighted
+* Click another position on the board - ensure that the highlighted letter appears there
+* Click another tile on the rack, then click the board next to the tile already layed.
+    Then click the Play Word option - ensure that the message - 
+    "word must start on the left star tile" appears
+* Click the two tiles on the board - ensure they are returned to the rack
+* Make an invalid word that begins on the start square - ensure the message 
+    "Invalid word: xxx" appears
+* Click the last tile of the word, then click the board on the same orthogonal. Ensure that the
+    tile appears.
+* Click the Play Word option - ensure that the message "There is a gap in your tiles"
+appears.
+* Click the tile again and position it on a diagonal to the rest of the word.
+    Ensure the message "Letters must be on the same orthogonal" appears
+* Make a valid word in the correct position. Click the Play Word option, ensure that
+    the computer plays a word and that the current score appears (including penalties
+    for the change tile events). Ensure that the rack is replenished leaving the spare
+    letters.
+* Click a tile on the rack and then anywhere on the board, separate from the start word.
+    Click the Play Word option. Ensure that the message "Letter is not joined to other words"
+    appears.
+* Click the same tile then click the board adjacent to the computer's word. Ensure
+    that the message "You must play a tile adjacent to your own tiles" appears
+* Click the same tile and then the board adjacent to the player's word so that it forms
+    an invalid word. Click the Play Word option. Ensure that it displays an invalid
+    word message.
+* Play another letter from the rack to a random square on the board. Click Play Word,
+    ensure that the appropriate message is displayed.
+* Move the letter tile adjacent to the previous letter tile so that it forms invalid words.
+    Click Play Word. Ensure that the invalid words are listed in a message.
+* Remove the test tiles from the board. Then play a valid word that intersects the player's 
+    start word. Click the Play Word option and ensure that the score is updated, the
+    computer lays a valid word connected to its own tiles and that the previous word
+    layed by the computer is no longer highlighted, but the new letter positions are.
+    Ensure that the score is updated correctly.
+* Play to a position in which the computer's crossword can be linked to the players.
+    Ensure that tile captures (crossed words and new words) are correct for both
+    participants.
+* Play to a win with the computer reaching the edge of the board. Ensure that the winning
+panel is displayed and the Play Again button appear.
+* Click the play again button - ensure that the board is cleared and the game play options
+    appear.
+* Start a game, make a few plays then check the pass option.
+
+Play to situations which check the following:
+    * Player finishes tiles
+    Computer finishes tiles
+    * Player plays to winning edge
+    * Computer Pass
+    * Both computer and player pass

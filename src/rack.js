@@ -151,7 +151,7 @@ const rack = {
         let temp = [];
         let rackCell = -1;
         for (let i = 0; i < this.lettersPlaced[0].length; i++) {
-            if (this.lettersPlaced[0][i].letter === letter || (isStar && this.lettersPlaced[0][i].isStar)) {
+            if (!found && (this.lettersPlaced[0][i].letter === letter || (isStar && this.lettersPlaced[0][i].isStar))) {
                 found = true;
                 rackCell = this.lettersPlaced[0][i].rackCell;
             }
@@ -205,7 +205,7 @@ const rack = {
         }
         this.rackNumChars[playerNum] = this.rackLength - letterCount;
         if (letterCount >= this.rackLength) {
-            endOfGame === true;
+            endOfGame = true;
         }
 
         // Debug
