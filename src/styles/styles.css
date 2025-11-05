@@ -85,8 +85,8 @@ body {
 }
 
 #board td {
-    width: 17px;
-    height: 17px;
+    width: 19px;
+    height: 19px;
     padding-left: 2px;
     border: 1px solid #101010;
     border-radius: 6px;

@@ -1,7 +1,7 @@
 const board = {
 // Constants
-    boardWidth: 19,
-    boardHeight: 19,
+    boardWidth: 18,
+    boardHeight: 18,
     starCell1: 0,
     starCell2: 0,
     starCellX0: 0,

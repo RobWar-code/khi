@@ -14,6 +14,8 @@ Jobs Due
 
     Win bonus for computer missing - possibly end of game set.
 
+    Change layout of board to 18 x 18 cells to allow for mobile touch (cells 19 x 19px)
+
 Jobs Done
     04/11/2025
 

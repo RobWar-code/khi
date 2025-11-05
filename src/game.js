@@ -170,7 +170,12 @@ const game = {
             endOfGame = rack.replenish(this.userNum);
             if (endOfGame) {
                 this.winner = this.userNum;
-                this.winBonus = this.finishLettersBonus;
+                if (gotWin) {
+                    this.winBonus = this.finishLettersBonus + this.gameEdgeBonus;
+                }
+                else {
+                    this.winBonus = this.finishLettersBonus;
+                }
             }
 
         } // End if not player passed
@@ -189,7 +194,16 @@ const game = {
             // Allow for too many changes or passes
             let endObj = computer.play();
             gotWin = endObj.gotWin;
-            if (gotWin) this.winner = computer.playerNum;
+            if (gotWin) {
+                this.winner = computer.playerNum;
+                if (endObj.lettersFinished) {
+                    this.winBonus = this.gameEdgeBonus + this.finishLettersBonus;
+                }
+                else {
+                    this.winBonus = this.gameEdgeBonus;
+                }
+                this.winner = computer.playerNum;
+            }
             else if (endObj.pass) {
                 let message = "Computer Passed";
                 this.statusReport(message);
