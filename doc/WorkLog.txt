@@ -2,6 +2,12 @@ Work Log
 
 Jobs Due
 
+    Adjust the size of the table cells to 18 x 18, to allow for small mobile screens
+
+    Modify the star graphic to look more like a star
+
+    Adjust the dictionary to be more standard English.
+
     Consider: At the game start allow the user to select board side and start first
 
     Where the computer hiScore is equal, consider random selection
@@ -12,11 +18,16 @@ Jobs Due
 
     Allow for computer game finished after change tiles on first word
 
+
+Jobs Done
+    05/11/2025
+    
+    * Adjust Intro
+
     * Win bonus for computer missing - possibly end of game set.
 
     * Change layout of board to 18 x 18 cells to allow for mobile touch (cells 19 x 19px)
 
-Jobs Done
     04/11/2025
 
     * Mobile Adjustments 

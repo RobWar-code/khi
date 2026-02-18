@@ -66,7 +66,7 @@ body {
 
 /* Main Board */
 #boardDiv {
-    width: 380px;
+    width: 360px;
     padding-top: 8px;
     padding-bottom: 8px;
     padding-left: 4px;
@@ -85,8 +85,8 @@ body {
 }
 
 #board td {
-    width: 19px;
-    height: 19px;
+    width: 18px;
+    height: 18px;
     padding-left: 2px;
     border: 1px solid #101010;
     border-radius: 6px;
