@@ -2,6 +2,9 @@ Work Log
 
 Jobs Due
 
+    Edit the wordlist to remove obscure terms
+        Deduplicate the edited word list
+
     Adjust the size of the table cells to 18 x 18, to allow for small mobile screens
 
     Modify the star graphic to look more like a star
